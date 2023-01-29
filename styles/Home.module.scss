@@ -1,0 +1,125 @@
+.container {
+  padding: 0 40px;
+}
+
+.main {
+  min-height: 100vh;
+  padding: 40px 0;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.footer {
+  display: flex;
+  flex: 1;
+  padding: 2rem 0;
+  border-top: 1px solid #eaeaea;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  margin: 0 0 20px;
+}
+
+.buttons {
+  position: sticky;
+  top: 20px;
+  display: flex;
+  justify-content: space-between;
+  background-color: #ffffff;
+  border: 1px solid #929292;
+  border-radius: 2px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.button-group {
+  display: flex;
+}
+
+.file-upload {
+  display: block;
+  text-align: center;
+  width: 150px;
+  padding: 5px;
+  border-radius: 2px;
+  background-color: #017110;
+  color: #ffffff;
+  cursor: pointer;
+  margin-right: 10px;
+  input {
+    display: none;
+  }
+}
+
+.tasks {
+  margin-bottom: 20px;
+  border: 1px solid #929292;
+  border-radius: 2px;
+  padding: 10px;
+}
+
+.task {
+  margin-bottom: 10px;
+  background-color: #ffffee;
+  border: 1px solid #929292;
+  border-radius: 2px;
+  padding: 10px;
+}
+
+.task-content {
+  &:not(:last-child) {
+    margin-bottom: 5px;
+  }
+}
+
+.task-project {
+  display: flex;
+}
+
+.task-project-type {
+  margin-right: 5px;
+}
+.target-group {
+  display: flex;
+}
+
+.target {
+  &:not(:last-child) {
+    margin-right: 10px;
+  }
+}
+
+.times {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.operating-times,
+.rest-times {
+  border: 1px solid #929292;
+  border-radius: 2px;
+  padding: 10px;
+}
+
+.operating-times {
+  margin-right: 20px;
+}
+
+.operating-time,
+.rest-time {
+  margin-bottom: 10px;
+}
+
+.other {
+  margin-bottom: 10px;
+}
+
+.task-link {
+  margin-left: 10px;
+  color: blue;
+  &:hover {
+    text-decoration: underline;
+  }
+}

@@ -1,0 +1,33 @@
+// TODO: 表示、非表示の切り替えの際アニメーションを効かせたいが、上手くいかなかった。
+.modal {
+  display: block;
+  opacity: 0;
+  transition: opacity 3s;
+}
+.modal.is-show {
+  opacity: 1;
+}
+// アニメーションが効いていない
+
+.content {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translatex(-50%) translatey(-50%);
+  background-color: #ffffff;
+  min-width: 500px;
+  padding: 10px;
+  border-radius: 2px;
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000000;
+  opacity: 0.5;
+}
+.footer {
+  text-align: center;
+}

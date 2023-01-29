@@ -1,0 +1,34 @@
+.com-button {
+  height: 30px;
+  padding: 5px;
+  border-radius: 2px;
+  color: #ffffff;
+  border: none;
+  &:not(.disabled) {
+    cursor: pointer;
+  }
+  &:not(:last-child) {
+    margin-right: 10px;
+  }
+  &:not(.small) {
+    width: 150px;
+  }
+}
+.blue {
+  background-color: #0076ba;
+}
+.green {
+  background-color: #017110;
+}
+.red {
+  background-color: #ed220d;
+}
+.gray {
+  background-color: #666666;
+}
+.small {
+  width: 75px;
+}
+.disabled {
+  background-color: #cccccc;
+}
