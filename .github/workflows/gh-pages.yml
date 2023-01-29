@@ -1,6 +1,6 @@
 name: github pages
 
-# masterブランチにプッシュしたときjobsに記述した操作を行う
+# mainブランチにプッシュしたときjobsに記述した操作を行う
 on:
   push:
     branches:
@@ -36,6 +36,12 @@ jobs:
     # プロジェクトルート直下に.nextディレクトリができる
     - name: build
       run: npm run build
+
+    # 静的なHTMLとしてNext.jsアプリを生成する
+    # プロジェクトルート直下にoutディレクトリができる
+    # そのなかに、HTMLファイル群と、それらが読み込むJSファイル群を収めた_nextディレクトリがある
+    - name: export
+      run: npm run export
 
     # しかしGitHub Pagesの仕様として_から始まるディレクトリが見えず404となる
     # つまりHTMLからJSを読み込めない
