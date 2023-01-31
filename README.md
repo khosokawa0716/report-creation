@@ -1,34 +1,28 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## 日報作成ツール
+このツールは、日報を簡単に、正確に作成することができます。また、データを書き出すことによって、状態を保存しておくことができます。
+https://khosokawa0716.github.io/report-creation/index.html
 
-## Getting Started
+### はじめに
 
-First, run the development server:
+ツールを使う前に、一つ設定が必要な場合があります。
+日報を送信するときに使っているメールソフトが、mailtoのリンクをクリックしたときに開かれる必要があります。
+GmailをChromeで設定する例です。
+1. Gmailにアクセスすると、アドレス欄の右側にひし形が2つ重なったマークが表示されています。
+1. これをクリックして「すべてのメールリンクをmail.google.comで開きますか？」を許可して完了をクリックします。
+1. Windowsの場合はスタートメニューから「設定（歯車のアイコン）」→「アプリ」→「規定のアプリ」のメールの項目をGoogle Chromeに設定します。
 
-```bash
-npm run dev
-# or
-yarn dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 使い方
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+- 画面下の方にある宛先、CC、宛先の人の名前、自分の名前、4つの項目を入力します。これらの項目は変わらないと思うので、入力したらデータの書き出しをクリックして保存するのが良いです。
+- タスクの入力をします。その日行ったタスクの場合、本日の所にチェックを入れてください。この状態では報告の欄が入力必須になります。
+- リロードを行うとデータがクリアされます。保存を行うにはデータの書き出しをクリックして、データをダウンロードします。
+- 保存したデータを使用する場合には、データの読み込みをクリックしてデータを選択してください。データが読み込まれると、それまで入力していた状態に上書きされます。
+- プレビューをクリックすると、メールで送る文章が確認できます。もう一度クリックすると、入力するページに戻ります。
+- メール作成をクリックすると宛先、CCが入力された状態でメーラーが起動します。クリップボードには作成した日報の内容がコピーされているので、メールの内容に貼り付けてください。
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+### 注意
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- このツールは日報の内容を保証するものではありません。メールを送信する前に、宛先や内容の確認を行なってください。
+- バグや機能の要望がありましたら、ご連絡いただけると嬉しいです。
+  https://github.com/khosokawa0716/report-creation/issues
