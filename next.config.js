@@ -6,7 +6,6 @@ const nextConfig = {
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
   },
-  assetPrefix: '/report-creation',
 }
 
 module.exports = nextConfig
