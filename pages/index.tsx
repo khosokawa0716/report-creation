@@ -844,18 +844,30 @@ ${fromName}`
           )}
           {isShowPreview && (
             <div className="preview">
-              <div>
-                <input type="text" value={address} readOnly />
+              <h3 className={styles['preview-title']}>
+                プレビュー（フォームは読み取り専用です）
+              </h3>
+              <div className={styles['preview-address']}>
+                <label>
+                  宛先
+                  <input type="text" value={address} readOnly />
+                </label>
+              </div>
+              <div className={styles['preview-cc']}>
+                <label>
+                  CC
+                  <input type="text" value={carbonCopy} readOnly />
+                </label>
               </div>
               <div>
-                <input type="text" value={carbonCopy} readOnly />
-              </div>
-              <div>
-                <textarea
-                  value={previewContent}
-                  readOnly
-                  style={{ height: '600px', width: '600px' }}
-                ></textarea>
+                <label>
+                  本文（メール作成ボタンをクリックすると、クリップボードにコピーされます）
+                  <textarea
+                    value={previewContent}
+                    readOnly
+                    className={styles['preview-content']}
+                  ></textarea>
+                </label>
               </div>
             </div>
           )}
@@ -878,7 +890,24 @@ ${fromName}`
         )}
       </main>
 
-      <footer className={styles.footer}>フッター</footer>
+      <footer className={styles.footer}>
+        <a
+          href="https://github.com/khosokawa0716/report-creation#readme"
+          rel="noreferrer"
+          target="_blank"
+          className={styles['footer-link']}
+        >
+          README!
+        </a>
+        <a
+          href="https://khosokawa0716.github.io/branchname-and-command/"
+          rel="noreferrer"
+          target="_blank"
+          className={styles['footer-link']}
+        >
+          ブランチ作成ツール
+        </a>
+      </footer>
     </div>
   )
 }
