@@ -2,6 +2,7 @@ import Head from 'next/head'
 import InputText from '../components/InputText'
 import InputNumber from '../components/InputNumber'
 import InputTime from '../components/InputTime'
+import InputPassword from '../components/InputPassword'
 import TextArea from '../components/TextArea'
 import Button from '../components/Button'
 import PulldownMenu from '../components/PulldownMenu'
@@ -11,10 +12,24 @@ import Modal from '../components/Modal'
 import ModalCaution from '../components/ModalCaution'
 import styles from '../styles/Home.module.scss'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 export default function Home() {
   const pageTitle = '日報作成ツール'
+  const [isLogin, setIsLogin] = useState(false)
+  const [loginId, setLoginId] = useState('')
+  const [loginPass, setLoginPass] = useState('')
+  const [loginMessage, setLoginMessage] = useState('')
+  const handleLogin = () => {
+    const isCorrectVal = loginId === 'tsuku2' && loginPass === 'kumu2'
+    if (isCorrectVal) {
+      setLoginId('')
+      setLoginPass('')
+      setIsLogin(true)
+    } else {
+      setLoginMessage('IDかPasswordが違います。STGの認証と同じです。')
+    }
+  }
   const projects = [
     {
       label: 'F2023',
@@ -31,6 +46,26 @@ export default function Home() {
     {
       label: 'TICKET_DEFECT',
       value: 'TICKET_DEFECT',
+    },
+    {
+      label: 'GOURMET_DEFECT',
+      value: 'GOURMET_DEFECT',
+    },
+    {
+      label: 'HOME_DEFECT',
+      value: 'HOME_DEFECT',
+    },
+    {
+      label: 'BEAUTY_DEFECT',
+      value: 'BEAUTY_DEFECT',
+    },
+    {
+      label: 'FARM',
+      value: 'FARM',
+    },
+    {
+      label: 'QC_FB',
+      value: 'QC_FB',
     },
   ]
   const readData = (e: any) => {
@@ -417,321 +452,279 @@ ${fromName}`
       </Head>
 
       <main className={styles.main}>
-        <div className="wrapper">
-          <h1 className={styles.title}>{pageTitle}</h1>
-          <div className={styles.buttons}>
-            <div className={styles['button-group']}>
-              <label htmlFor="file-upload" className={styles['file-upload']}>
-                データの読み込み
-                <input
-                  type="file"
-                  onInput={(e) => readData(e)}
-                  id="file-upload"
-                />
-              </label>
-              <Button backGroundColor="blue" handleClick={exportData}>
-                データの書き出し
+        {!isLogin && (
+          <div>
+            <h1 className={styles.title}>{pageTitle}</h1>
+            <div className={styles.input}>
+              <InputPassword
+                labelText="ID"
+                initValue={loginId}
+                handleChange={(e) => setLoginId(e.target.value)}
+              />
+            </div>
+            <div className={styles.input}>
+              <InputPassword
+                labelText="Password"
+                initValue={loginPass}
+                handleChange={(e) => setLoginPass(e.target.value)}
+              />
+            </div>
+            <div className={styles['login-button']}>
+              <Button backGroundColor="blue" handleClick={handleLogin}>
+                ログイン
               </Button>
             </div>
-            <div>
-              {isShowPreview ? (
-                <Button backGroundColor="green" handleClick={closePreview}>
-                  プレビュー
-                </Button>
-              ) : (
-                <Button backGroundColor="green" handleClick={showPreview}>
-                  プレビュー
-                </Button>
-              )}
-              <Button backGroundColor="blue" handleClick={createMail}>
-                メール作成
-              </Button>
-            </div>
+            <p className={styles['login-message']}>{loginMessage}</p>
           </div>
-          {!isShowPreview && (
-            <div className="form">
-              <div className={styles.tasks}>
-                {tasks.map((_task, index) => (
-                  <div className={styles.task} key={index}>
-                    <div className={styles['task-content']}>
-                      <InputText
-                        labelText={`タスク${index + 1}`}
-                        maxLength={256}
-                        borderColor="blue"
-                        initValue={_task.name}
-                        handleChange={(e) =>
-                          setTaskContent('name', index, e.target.value)
-                        }
-                      />
-                      <span>{String(_task.name.length)}/256</span>
-                    </div>
-                    <div
-                      className={`${styles['task-content']} ${styles['task-project']}`}
-                    >
-                      <div className={styles['task-project-type']}>
-                        <h3>プロジェクト</h3>
-                        <PulldownMenu
-                          initValue={_task.project}
-                          isDisabled={!_task.isBacklog}
-                          options={projects}
-                          handleChange={(e) =>
-                            setTaskContent('project', index, e.target.value)
-                          }
-                        />
-                      </div>
-                      <InputNumber
-                        labelText="番号"
-                        initValue={_task.backlogNumber}
-                        isDisabled={!_task.isBacklog}
-                        handleChange={(e) => {
-                          setTaskContent('backlogNumber', index, e.target.value)
-                        }}
-                      />
-                      <Checkbox
-                        labelText="Backlogの有無"
-                        initChecked={_task.isBacklog}
-                        handleChange={(e) =>
-                          setTaskContent(
-                            'isBacklog',
-                            index,
-                            '',
-                            e.target.checked,
-                          )
-                        }
-                      />
-                      {_task.isBacklog && (
-                        <a
-                          className={styles['task-link']}
-                          rel="noreferrer"
-                          target="_blank"
-                          href={`https://kumukumu.backlog.com/view/${_task.project}-${_task.backlogNumber}`}
-                        >{`https://kumukumu.backlog.com/view/${_task.project}-${_task.backlogNumber}`}</a>
-                      )}
-                    </div>
-                    <div className={styles['task-content']}>
-                      <div className={styles['target-group']}>
-                        <div className={styles.target}>
-                          <Checkbox
-                            labelText="今月"
-                            initChecked={_task.isMonth}
-                            handleChange={(e) =>
-                              setTaskContent(
-                                'isMonth',
-                                index,
-                                '',
-                                e.target.checked,
-                              )
-                            }
-                          />
-                          <Range
-                            initValue={_task.monthTarget}
-                            handleChange={(e) =>
-                              setTaskContent(
-                                'monthTarget',
-                                index,
-                                e.target.value,
-                              )
-                            }
-                          />
-                          <span>{_task.monthTarget}/100</span>
-                        </div>
-                        <div className={styles.target}>
-                          <Checkbox
-                            labelText="今週"
-                            initChecked={_task.isWeek}
-                            handleChange={(e) =>
-                              setTaskContent(
-                                'isWeek',
-                                index,
-                                '',
-                                e.target.checked,
-                              )
-                            }
-                          />
-                          <Range
-                            initValue={_task.weekTarget}
-                            handleChange={(e) =>
-                              setTaskContent(
-                                'weekTarget',
-                                index,
-                                e.target.value,
-                              )
-                            }
-                          />
-                          <span>{_task.weekTarget}/100</span>
-                        </div>
-                      </div>
-                      <div className={styles['target-group']}>
-                        <div className={styles.target}>
-                          <Checkbox
-                            labelText="本日"
-                            initChecked={_task.isToday}
-                            handleChange={(e) =>
-                              setTaskContent(
-                                'isToday',
-                                index,
-                                '',
-                                e.target.checked,
-                              )
-                            }
-                          />
-                          <Range
-                            initValue={_task.todayTarget}
-                            handleChange={(e) =>
-                              setTaskContent(
-                                'todayTarget',
-                                index,
-                                e.target.value,
-                              )
-                            }
-                          />
-                          <span>{_task.todayTarget}/100</span>
-                        </div>
-                        <div className={styles.target}>
-                          <Checkbox
-                            labelText="予定"
-                            initChecked={_task.isNext}
-                            handleChange={(e) =>
-                              setTaskContent(
-                                'isNext',
-                                index,
-                                '',
-                                e.target.checked,
-                              )
-                            }
-                          />
-                          <Range
-                            initValue={_task.nextTarget}
-                            handleChange={(e) =>
-                              setTaskContent(
-                                'nextTarget',
-                                index,
-                                e.target.value,
-                              )
-                            }
-                          />
-                          <span>{_task.nextTarget}/100</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className={styles['task-content']}>
-                      <TextArea
-                        labelText="報告"
-                        isDisabled={!_task.isToday}
-                        maxLength={2000}
-                        borderColor="blue"
-                        initValue={_task.todayProgress}
-                        handleChange={(e) =>
-                          setTaskContent('todayProgress', index, e.target.value)
-                        }
-                      />
-                      <span>{String(_task.todayProgress.length)}/2000</span>
-                    </div>
-                    <Button
-                      disabled={tasks.length <= 1}
-                      isSmall
-                      backGroundColor="red"
-                      handleClick={() => showModalCaution(index)}
-                    >
-                      削除
-                    </Button>
-                  </div>
-                ))}
-                <Button
-                  disabled={tasks.length >= 20}
-                  isSmall
-                  backGroundColor="blue"
-                  handleClick={addTask}
-                >
-                  追加
+        )}
+        {isLogin && (
+          <div className="wrapper">
+            <h1 className={styles.title}>{pageTitle}</h1>
+            <div className={styles.buttons}>
+              <div className={styles['button-group']}>
+                <label htmlFor="file-upload" className={styles['file-upload']}>
+                  データの読み込み
+                  <input
+                    type="file"
+                    onInput={(e) => readData(e)}
+                    id="file-upload"
+                  />
+                </label>
+                <Button backGroundColor="blue" handleClick={exportData}>
+                  データの書き出し
                 </Button>
               </div>
-              <div className={styles.times}>
-                <div className={styles['operating-times']}>
-                  {operatingTimes.map((_operatingTime, index) => (
-                    <div className={styles['operating-time']} key={index}>
-                      <h3>稼働時間{index + 1}</h3>
-                      <InputTime
-                        initValue={_operatingTime.startHour}
-                        type="hour"
-                        handleChange={(e) =>
-                          setOperatingTimesContent(
-                            'startHour',
-                            e.target.value,
-                            index,
-                          )
-                        }
-                      />
-                      :
-                      <InputTime
-                        initValue={_operatingTime.startMinute}
-                        type="minute"
-                        handleChange={(e) =>
-                          setOperatingTimesContent(
-                            'startMinute',
-                            e.target.value,
-                            index,
-                          )
-                        }
-                      />
-                      〜
-                      <InputTime
-                        initValue={_operatingTime.endHour}
-                        type="hour"
-                        handleChange={(e) =>
-                          setOperatingTimesContent(
-                            'endHour',
-                            e.target.value,
-                            index,
-                          )
-                        }
-                      />
-                      :
-                      <InputTime
-                        initValue={_operatingTime.endMinute}
-                        type="minute"
-                        handleChange={(e) =>
-                          setOperatingTimesContent(
-                            'endMinute',
-                            e.target.value,
-                            index,
-                          )
-                        }
-                      />
+              <div>
+                {isShowPreview ? (
+                  <Button backGroundColor="green" handleClick={closePreview}>
+                    プレビュー
+                  </Button>
+                ) : (
+                  <Button backGroundColor="green" handleClick={showPreview}>
+                    プレビュー
+                  </Button>
+                )}
+                <Button backGroundColor="blue" handleClick={createMail}>
+                  メール作成
+                </Button>
+              </div>
+            </div>
+            {!isShowPreview && (
+              <div className="form">
+                <div className={styles.tasks}>
+                  {tasks.map((_task, index) => (
+                    <div className={styles.task} key={index}>
+                      <div className={styles['task-content']}>
+                        <InputText
+                          labelText={`タスク${index + 1}`}
+                          maxLength={256}
+                          borderColor="blue"
+                          initValue={_task.name}
+                          handleChange={(e) =>
+                            setTaskContent('name', index, e.target.value)
+                          }
+                        />
+                        <span>{String(_task.name.length)}/256</span>
+                      </div>
+                      <div
+                        className={`${styles['task-content']} ${styles['task-project']}`}
+                      >
+                        <div className={styles['task-project-type']}>
+                          <h3>プロジェクト</h3>
+                          <PulldownMenu
+                            initValue={_task.project}
+                            isDisabled={!_task.isBacklog}
+                            options={projects}
+                            handleChange={(e) =>
+                              setTaskContent('project', index, e.target.value)
+                            }
+                          />
+                        </div>
+                        <InputNumber
+                          labelText="番号"
+                          initValue={_task.backlogNumber}
+                          isDisabled={!_task.isBacklog}
+                          handleChange={(e) => {
+                            setTaskContent(
+                              'backlogNumber',
+                              index,
+                              e.target.value,
+                            )
+                          }}
+                        />
+                        <Checkbox
+                          labelText="Backlogの有無"
+                          initChecked={_task.isBacklog}
+                          handleChange={(e) =>
+                            setTaskContent(
+                              'isBacklog',
+                              index,
+                              '',
+                              e.target.checked,
+                            )
+                          }
+                        />
+                        {_task.isBacklog && (
+                          <a
+                            className={styles['task-link']}
+                            rel="noreferrer"
+                            target="_blank"
+                            href={`https://kumukumu.backlog.com/view/${_task.project}-${_task.backlogNumber}`}
+                          >{`https://kumukumu.backlog.com/view/${_task.project}-${_task.backlogNumber}`}</a>
+                        )}
+                      </div>
+                      <div className={styles['task-content']}>
+                        <div className={styles['target-group']}>
+                          <div className={styles.target}>
+                            <Checkbox
+                              labelText="今月"
+                              initChecked={_task.isMonth}
+                              handleChange={(e) =>
+                                setTaskContent(
+                                  'isMonth',
+                                  index,
+                                  '',
+                                  e.target.checked,
+                                )
+                              }
+                            />
+                            <Range
+                              initValue={_task.monthTarget}
+                              handleChange={(e) =>
+                                setTaskContent(
+                                  'monthTarget',
+                                  index,
+                                  e.target.value,
+                                )
+                              }
+                            />
+                            <span>{_task.monthTarget}/100</span>
+                          </div>
+                          <div className={styles.target}>
+                            <Checkbox
+                              labelText="今週"
+                              initChecked={_task.isWeek}
+                              handleChange={(e) =>
+                                setTaskContent(
+                                  'isWeek',
+                                  index,
+                                  '',
+                                  e.target.checked,
+                                )
+                              }
+                            />
+                            <Range
+                              initValue={_task.weekTarget}
+                              handleChange={(e) =>
+                                setTaskContent(
+                                  'weekTarget',
+                                  index,
+                                  e.target.value,
+                                )
+                              }
+                            />
+                            <span>{_task.weekTarget}/100</span>
+                          </div>
+                        </div>
+                        <div className={styles['target-group']}>
+                          <div className={styles.target}>
+                            <Checkbox
+                              labelText="本日"
+                              initChecked={_task.isToday}
+                              handleChange={(e) =>
+                                setTaskContent(
+                                  'isToday',
+                                  index,
+                                  '',
+                                  e.target.checked,
+                                )
+                              }
+                            />
+                            <Range
+                              initValue={_task.todayTarget}
+                              handleChange={(e) =>
+                                setTaskContent(
+                                  'todayTarget',
+                                  index,
+                                  e.target.value,
+                                )
+                              }
+                            />
+                            <span>{_task.todayTarget}/100</span>
+                          </div>
+                          <div className={styles.target}>
+                            <Checkbox
+                              labelText="予定"
+                              initChecked={_task.isNext}
+                              handleChange={(e) =>
+                                setTaskContent(
+                                  'isNext',
+                                  index,
+                                  '',
+                                  e.target.checked,
+                                )
+                              }
+                            />
+                            <Range
+                              initValue={_task.nextTarget}
+                              handleChange={(e) =>
+                                setTaskContent(
+                                  'nextTarget',
+                                  index,
+                                  e.target.value,
+                                )
+                              }
+                            />
+                            <span>{_task.nextTarget}/100</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className={styles['task-content']}>
+                        <TextArea
+                          labelText="報告"
+                          isDisabled={!_task.isToday}
+                          maxLength={2000}
+                          borderColor="blue"
+                          initValue={_task.todayProgress}
+                          handleChange={(e) =>
+                            setTaskContent(
+                              'todayProgress',
+                              index,
+                              e.target.value,
+                            )
+                          }
+                        />
+                        <span>{String(_task.todayProgress.length)}/2000</span>
+                      </div>
+                      <Button
+                        disabled={tasks.length <= 1}
+                        isSmall
+                        backGroundColor="red"
+                        handleClick={() => showModalCaution(index)}
+                      >
+                        削除
+                      </Button>
                     </div>
                   ))}
                   <Button
-                    disabled={operatingTimes.length >= 5}
+                    disabled={tasks.length >= 20}
                     isSmall
-                    backGroundColor="green"
-                    handleClick={addOperatingTime}
+                    backGroundColor="blue"
+                    handleClick={addTask}
                   >
                     追加
                   </Button>
-                  <Button
-                    disabled={operatingTimes.length <= 1}
-                    isSmall
-                    backGroundColor="red"
-                    handleClick={deleteOperatingTime}
-                  >
-                    削除
-                  </Button>
                 </div>
-                <div className={styles['rest-times']}>
-                  <Checkbox
-                    labelText="追加休憩の有無"
-                    initChecked={isRestTime}
-                    handleChange={(e) => setIsRestTime(e.target.checked)}
-                  />
-                  {isRestTime &&
-                    restTimes.map((_restTime, index) => (
-                      <div className={styles['rest-time']} key={index}>
-                        <h3>追加休憩{index + 1}</h3>
+                <div className={styles.times}>
+                  <div className={styles['operating-times']}>
+                    {operatingTimes.map((_operatingTime, index) => (
+                      <div className={styles['operating-time']} key={index}>
+                        <h3>稼働時間{index + 1}</h3>
                         <InputTime
-                          initValue={_restTime.startHour}
+                          initValue={_operatingTime.startHour}
                           type="hour"
                           handleChange={(e) =>
-                            setRestTimesContent(
+                            setOperatingTimesContent(
                               'startHour',
                               e.target.value,
                               index,
@@ -740,10 +733,10 @@ ${fromName}`
                         />
                         :
                         <InputTime
-                          initValue={_restTime.startMinute}
+                          initValue={_operatingTime.startMinute}
                           type="minute"
                           handleChange={(e) =>
-                            setRestTimesContent(
+                            setOperatingTimesContent(
                               'startMinute',
                               e.target.value,
                               index,
@@ -752,10 +745,10 @@ ${fromName}`
                         />
                         〜
                         <InputTime
-                          initValue={_restTime.endHour}
+                          initValue={_operatingTime.endHour}
                           type="hour"
                           handleChange={(e) =>
-                            setRestTimesContent(
+                            setOperatingTimesContent(
                               'endHour',
                               e.target.value,
                               index,
@@ -764,10 +757,10 @@ ${fromName}`
                         />
                         :
                         <InputTime
-                          initValue={_restTime.endMinute}
+                          initValue={_operatingTime.endMinute}
                           type="minute"
                           handleChange={(e) =>
-                            setRestTimesContent(
+                            setOperatingTimesContent(
                               'endMinute',
                               e.target.value,
                               index,
@@ -776,102 +769,179 @@ ${fromName}`
                         />
                       </div>
                     ))}
-                  {isRestTime && (
-                    <>
-                      <Button
-                        disabled={restTimes.length >= 5}
-                        isSmall
-                        backGroundColor="green"
-                        handleClick={addRestTime}
-                      >
-                        追加
-                      </Button>
-                      <Button
-                        disabled={restTimes.length <= 1}
-                        isSmall
-                        backGroundColor="red"
-                        handleClick={deleteRestTime}
-                      >
-                        削除
-                      </Button>
-                    </>
-                  )}
+                    <Button
+                      disabled={operatingTimes.length >= 5}
+                      isSmall
+                      backGroundColor="green"
+                      handleClick={addOperatingTime}
+                    >
+                      追加
+                    </Button>
+                    <Button
+                      disabled={operatingTimes.length <= 1}
+                      isSmall
+                      backGroundColor="red"
+                      handleClick={deleteOperatingTime}
+                    >
+                      削除
+                    </Button>
+                  </div>
+                  <div className={styles['rest-times']}>
+                    <Checkbox
+                      labelText="追加休憩の有無"
+                      initChecked={isRestTime}
+                      handleChange={(e) => setIsRestTime(e.target.checked)}
+                    />
+                    {isRestTime &&
+                      restTimes.map((_restTime, index) => (
+                        <div className={styles['rest-time']} key={index}>
+                          <h3>追加休憩{index + 1}</h3>
+                          <InputTime
+                            initValue={_restTime.startHour}
+                            type="hour"
+                            handleChange={(e) =>
+                              setRestTimesContent(
+                                'startHour',
+                                e.target.value,
+                                index,
+                              )
+                            }
+                          />
+                          :
+                          <InputTime
+                            initValue={_restTime.startMinute}
+                            type="minute"
+                            handleChange={(e) =>
+                              setRestTimesContent(
+                                'startMinute',
+                                e.target.value,
+                                index,
+                              )
+                            }
+                          />
+                          〜
+                          <InputTime
+                            initValue={_restTime.endHour}
+                            type="hour"
+                            handleChange={(e) =>
+                              setRestTimesContent(
+                                'endHour',
+                                e.target.value,
+                                index,
+                              )
+                            }
+                          />
+                          :
+                          <InputTime
+                            initValue={_restTime.endMinute}
+                            type="minute"
+                            handleChange={(e) =>
+                              setRestTimesContent(
+                                'endMinute',
+                                e.target.value,
+                                index,
+                              )
+                            }
+                          />
+                        </div>
+                      ))}
+                    {isRestTime && (
+                      <>
+                        <Button
+                          disabled={restTimes.length >= 5}
+                          isSmall
+                          backGroundColor="green"
+                          handleClick={addRestTime}
+                        >
+                          追加
+                        </Button>
+                        <Button
+                          disabled={restTimes.length <= 1}
+                          isSmall
+                          backGroundColor="red"
+                          handleClick={deleteRestTime}
+                        >
+                          削除
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                </div>
+                <div className="others">
+                  <div className={styles.other}>
+                    <TextArea
+                      labelText="コメント"
+                      borderColor="gray"
+                      initValue={comment}
+                      handleChange={(e) => setComment(e.target.value)}
+                    />
+                  </div>
+                  <div className={styles.other}>
+                    <InputText
+                      labelText="宛先"
+                      borderColor="gray"
+                      initValue={address}
+                      handleChange={(e) => setAddress(e.target.value)}
+                    />
+                  </div>
+                  <div className={styles.other}>
+                    <InputText
+                      labelText="CC"
+                      borderColor="gray"
+                      initValue={carbonCopy}
+                      handleChange={(e) => setCarbonCopy(e.target.value)}
+                    />
+                  </div>
+                  <div className={styles.other}>
+                    <InputText
+                      labelText="宛先の人の名前"
+                      borderColor="gray"
+                      initValue={toName}
+                      handleChange={(e) => setToName(e.target.value)}
+                    />
+                  </div>
+                  <div className={styles.other}>
+                    <InputText
+                      labelText="自分の名前"
+                      borderColor="gray"
+                      initValue={fromName}
+                      handleChange={(e) => setFromName(e.target.value)}
+                    />
+                  </div>
                 </div>
               </div>
-              <div className="others">
-                <div className={styles.other}>
-                  <TextArea
-                    labelText="コメント"
-                    borderColor="gray"
-                    initValue={comment}
-                    handleChange={(e) => setComment(e.target.value)}
-                  />
+            )}
+            {isShowPreview && (
+              <div className="preview">
+                <h3 className={styles['preview-title']}>
+                  プレビュー（フォームは読み取り専用です）
+                </h3>
+                <div className={styles['preview-address']}>
+                  <label>
+                    宛先
+                    <input type="text" value={address} readOnly />
+                  </label>
                 </div>
-                <div className={styles.other}>
-                  <InputText
-                    labelText="宛先"
-                    borderColor="gray"
-                    initValue={address}
-                    handleChange={(e) => setAddress(e.target.value)}
-                  />
+                <div className={styles['preview-cc']}>
+                  <label>
+                    CC
+                    <input type="text" value={carbonCopy} readOnly />
+                  </label>
                 </div>
-                <div className={styles.other}>
-                  <InputText
-                    labelText="CC"
-                    borderColor="gray"
-                    initValue={carbonCopy}
-                    handleChange={(e) => setCarbonCopy(e.target.value)}
-                  />
-                </div>
-                <div className={styles.other}>
-                  <InputText
-                    labelText="宛先の人の名前"
-                    borderColor="gray"
-                    initValue={toName}
-                    handleChange={(e) => setToName(e.target.value)}
-                  />
-                </div>
-                <div className={styles.other}>
-                  <InputText
-                    labelText="自分の名前"
-                    borderColor="gray"
-                    initValue={fromName}
-                    handleChange={(e) => setFromName(e.target.value)}
-                  />
+                <div>
+                  <label>
+                    本文（メール作成ボタンをクリックすると、クリップボードにコピーされます）
+                    <textarea
+                      value={previewContent}
+                      readOnly
+                      className={styles['preview-content']}
+                    ></textarea>
+                  </label>
                 </div>
               </div>
-            </div>
-          )}
-          {isShowPreview && (
-            <div className="preview">
-              <h3 className={styles['preview-title']}>
-                プレビュー（フォームは読み取り専用です）
-              </h3>
-              <div className={styles['preview-address']}>
-                <label>
-                  宛先
-                  <input type="text" value={address} readOnly />
-                </label>
-              </div>
-              <div className={styles['preview-cc']}>
-                <label>
-                  CC
-                  <input type="text" value={carbonCopy} readOnly />
-                </label>
-              </div>
-              <div>
-                <label>
-                  本文（メール作成ボタンをクリックすると、クリップボードにコピーされます）
-                  <textarea
-                    value={previewContent}
-                    readOnly
-                    className={styles['preview-content']}
-                  ></textarea>
-                </label>
-              </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
         {isShowModal && (
           <Modal isShow={isShowModal} handleClick={toggleIsShowModal}>
             {errorMessages}
