@@ -83,9 +83,15 @@
 }
 
 .task-content {
+  position: relative;
   &:not(:last-child) {
     margin-bottom: 5px;
   }
+}
+
+.task-count {
+  position: absolute;
+  right: 0;
 }
 
 .task-project {
@@ -95,6 +101,18 @@
 .task-project-type {
   margin-right: 5px;
 }
+
+.task-backlog {
+  position: relative;
+}
+
+.task-link {
+  position: absolute;
+  left: 0;
+  top: 25px;
+  white-space: nowrap;
+}
+
 .target-group {
   display: flex;
 }
