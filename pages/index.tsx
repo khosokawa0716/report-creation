@@ -12,22 +12,29 @@ import Modal from '../components/Modal'
 import ModalCaution from '../components/ModalCaution'
 import styles from '../styles/Home.module.scss'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 export default function Home() {
   const pageTitle = '日報作成ツール'
   const [isLogin, setIsLogin] = useState(false)
   const [loginPass, setLoginPass] = useState('')
   const [loginMessage, setLoginMessage] = useState('')
+  const strageKey = 'report-creation-password'
+  const password = 'report'
   const handleLogin = () => {
-    const isCorrectVal = loginPass === 'report'
+    const isCorrectVal = loginPass === password
     if (isCorrectVal) {
+      localStorage.setItem(strageKey, loginPass)
       setLoginPass('')
       setIsLogin(true)
     } else {
       setLoginMessage('パスワードが違います。')
     }
   }
+  useEffect(() => {
+    const inputedPassword = localStorage.getItem(strageKey)
+    if (inputedPassword === password) setIsLogin(true)
+  }, [])
   const projects = [
     {
       label: 'F2023',
