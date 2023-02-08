@@ -18,6 +18,7 @@
   min-width: 500px;
   padding: 10px;
   border-radius: 2px;
+  z-index: 101;
 }
 .overlay {
   position: fixed;
@@ -27,6 +28,7 @@
   height: 100vh;
   background-color: #000000;
   opacity: 0.5;
+  z-index: 100;
 }
 .footer {
   text-align: center;
