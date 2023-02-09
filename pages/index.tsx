@@ -41,6 +41,10 @@ export default function Home() {
       value: 'FUTURE_DEVELOP_GOALS_2023',
     },
     {
+      label: 'MKPL',
+      value: 'MKPL_MAINTE_DEV',
+    },
+    {
       label: 'CMS_DEFECT',
       value: 'CMS_DEFECT',
     },
