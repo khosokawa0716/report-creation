@@ -335,9 +335,7 @@ export default function Home() {
   const getOperatingTimes = (): string => {
     let result = ''
     operatingTimes.forEach((time) => {
-      const timeStr =
-        `${time.startHour}:${time.startMinute}〜${time.endHour}:${time.endMinute}` +
-        '\n'
+      const timeStr = `${time.startHour}:${time.startMinute}〜${time.endHour}:${time.endMinute}`
       result = result + timeStr
     })
     return result
@@ -452,6 +450,15 @@ ${greeting}
 
 ${fromName}`
 
+  const [isShowTodayTasks, setIsShowTodayTasks] = useState(false)
+  const getTodayTasks = (checked: boolean) => {
+    setIsShowTodayTasks(checked)
+  }
+
+  const filteredTasks = !isShowTodayTasks
+    ? tasks
+    : tasks.filter((task) => task.isToday === true)
+
   return (
     <div className={styles.container}>
       <Head>
@@ -484,38 +491,50 @@ ${fromName}`
           <div className="wrapper">
             <h1 className={styles.title}>{pageTitle}</h1>
             <div className={styles.buttons}>
-              <div className={styles['button-group']}>
-                <label htmlFor="file-upload" className={styles['file-upload']}>
-                  データの読み込み
-                  <input
-                    type="file"
-                    onInput={(e) => readData(e)}
-                    id="file-upload"
-                  />
-                </label>
-                <Button backGroundColor="blue" handleClick={exportData}>
-                  データの書き出し
-                </Button>
+              <div className={styles['button-groups']}>
+                <div className={styles['button-group']}>
+                  <label
+                    htmlFor="file-upload"
+                    className={styles['file-upload']}
+                  >
+                    データの読み込み
+                    <input
+                      type="file"
+                      onInput={(e) => readData(e)}
+                      id="file-upload"
+                    />
+                  </label>
+                  <Button backGroundColor="blue" handleClick={exportData}>
+                    データの書き出し
+                  </Button>
+                </div>
+                <div>
+                  {isShowPreview ? (
+                    <Button backGroundColor="green" handleClick={closePreview}>
+                      プレビュー
+                    </Button>
+                  ) : (
+                    <Button backGroundColor="green" handleClick={showPreview}>
+                      プレビュー
+                    </Button>
+                  )}
+                  <Button backGroundColor="blue" handleClick={createMail}>
+                    メール作成
+                  </Button>
+                </div>
               </div>
               <div>
-                {isShowPreview ? (
-                  <Button backGroundColor="green" handleClick={closePreview}>
-                    プレビュー
-                  </Button>
-                ) : (
-                  <Button backGroundColor="green" handleClick={showPreview}>
-                    プレビュー
-                  </Button>
-                )}
-                <Button backGroundColor="blue" handleClick={createMail}>
-                  メール作成
-                </Button>
+                <Checkbox
+                  labelText="本日のタスクのみ"
+                  initChecked={isShowTodayTasks}
+                  handleChange={(e) => getTodayTasks(e.target.checked)}
+                />
               </div>
             </div>
             {!isShowPreview && (
               <div className="form">
                 <div className={styles.tasks}>
-                  {tasks.map((_task, index) => (
+                  {filteredTasks.map((_task, index) => (
                     <div className={styles.task} key={index}>
                       <div className={styles['task-content']}>
                         <span className={styles['task-count']}>
@@ -716,7 +735,7 @@ ${fromName}`
                     </div>
                   ))}
                   <Button
-                    disabled={tasks.length >= 20}
+                    disabled={tasks.length >= 100}
                     isSmall
                     backGroundColor="blue"
                     handleClick={addTask}
