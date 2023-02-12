@@ -1,0 +1,16 @@
+.text-red {
+  color: red;
+}
+.backlog-item {
+  display: flex;
+  margin-bottom: 10px;
+}
+.backlog-link {
+  display: flex;
+  align-items: flex-end;
+  margin-left: 10px;
+  color: #0076ba;
+  &:hover {
+    text-decoration: underline;
+  }
+}
