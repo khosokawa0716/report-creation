@@ -997,13 +997,8 @@ ${fromName}`
         >
           README!
         </a>
-        <a
-          href="https://khosokawa0716.github.io/branchname-and-command/"
-          rel="noreferrer"
-          target="_blank"
-          className={styles['footer-link']}
-        >
-          ブランチ作成ツール
+        <a href="./branch-name" className={styles['footer-link']}>
+          ブランチ名作成ツール
         </a>
       </footer>
     </div>
