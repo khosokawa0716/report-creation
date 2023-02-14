@@ -7,7 +7,7 @@ import Button from '../components/Button'
 import commonStyles from '../styles/Home.module.scss'
 import styles from '../styles/BranchName.module.scss'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 
 export default function BranchName() {
   const pageTitle = 'ブランチ名作成ツール'
@@ -136,7 +136,7 @@ export default function BranchName() {
         <meta name="robots" content="noindex" />
         <link rel="icon" href="./favicon.ico" />
       </Head>
-      <main className={commonStyles.main}>
+      <main className={styles.main}>
         {!isLogin && (
           <div>
             <h1>{pageTitle}</h1>
@@ -160,7 +160,7 @@ export default function BranchName() {
             <h1>{pageTitle}</h1>
             <fieldset>
               <legend>Backlog</legend>
-              <div className="backlog-item">
+              <div className={styles['backlog-item']}>
                 <Checkbox
                   labelText="親課題あり"
                   initChecked={hasParent}
@@ -168,7 +168,9 @@ export default function BranchName() {
                 />
               </div>
               <div className={styles['backlog-item']}>
-                <h3>ブランチの種類1: </h3>
+                <label className={styles['backlog-item-label']}>
+                  ブランチの種類1:{' '}
+                </label>
                 <PulldownMenu
                   initValue={branchType1Text}
                   isDisabled={false}
@@ -177,7 +179,9 @@ export default function BranchName() {
                 />
               </div>
               <div className={styles['backlog-item']}>
-                <h3>ブランチの種類2: </h3>
+                <label className={styles['backlog-item-label']}>
+                  ブランチの種類2:{' '}
+                </label>
                 <PulldownMenu
                   initValue={branchType2Text}
                   isDisabled={false}
@@ -236,7 +240,7 @@ export default function BranchName() {
             </fieldset>
             <div>
               <h3>git, ブランチ関連</h3>
-              <ul>
+              <ul className={styles['list']}>
                 <li onClick={() => handleClickListItem(focusBranchName)}>
                   {focusBranchName}
                   <i className="fas fa-copy"></i>
@@ -316,7 +320,7 @@ export default function BranchName() {
                 </li>
               </ul>
               <h3>その他</h3>
-              <ul>
+              <ul className={styles['list']}>
                 <li onClick={() => handleClickListItem('npm run compile:sass')}>
                   <span>
                     npm run compile
