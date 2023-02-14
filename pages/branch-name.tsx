@@ -26,32 +26,21 @@ export default function BranchName() {
       setLoginMessage('パスワードが違います。')
     }
   }
-  const clipboardCopy = (str: string) => {
-    const listener = (e: any) => {
-      e.clipboardData.setData('text/plain', str)
-      e.preventDefault()
-      document.removeEventListener('copy', listener)
-    }
-    document.addEventListener('copy', listener)
-    document.execCommand('copy')
+  const handleClickListItem = (str: string) => {
+    navigator.clipboard.writeText(str).then(
+      () => {
+        console.log('クリップボードに以下のテキストをコピーしました。: ' + str)
+      },
+      () => {
+        console.log('クリップボードのコピーに失敗しました。')
+      },
+    )
   }
   useEffect(() => {
     const inputedPassword = localStorage.getItem(strageKey)
     if (inputedPassword === password) setIsLogin(true)
-    const copyIcons = document.querySelectorAll('.fa-copy')
-    const handleClickIcon = (e: any) => {
-      const targetStr = e.currentTarget.parentNode.innerText
-      clipboardCopy(targetStr)
-    }
-    copyIcons.forEach((copyIcon) => {
-      copyIcon.addEventListener('click', handleClickIcon)
-    })
-    return () => {
-      copyIcons.forEach((copyIcon) => {
-        copyIcon.removeEventListener('click', handleClickIcon)
-      })
-    }
   }, [])
+
   const [hasParent, setHasParent] = useState(true)
   const branchType1 = [
     {
@@ -132,8 +121,11 @@ export default function BranchName() {
   const parentBranchName = `${branchType2Text}-${parentBacklogNumber}`
   const childBranchName = `${branchType2Text}-${childBacklogNumber}`
   const focusBranchName = hasParent ? childBranchName : parentBranchName
-  const branchName = hasParent
+  const branchNameWithHtml = hasParent
     ? `${branchType1Text}/<span style='color: red;'>#</span>${parentBranchName}/${childBranchName}`
+    : `${branchType1Text}/${parentBranchName}`
+  const branchName = hasParent
+    ? `${branchType1Text}/#${parentBranchName}/${childBranchName}`
     : `${branchType1Text}/${parentBranchName}`
   const copyIcon = "<i class='fas fa-copy'></i>"
   return (
@@ -144,7 +136,7 @@ export default function BranchName() {
         <meta name="robots" content="noindex" />
         <link rel="icon" href="./favicon.ico" />
       </Head>
-      <main className={commonStyles.main}>
+      <main className={styles.main}>
         {!isLogin && (
           <div>
             <h1>{pageTitle}</h1>
@@ -168,7 +160,7 @@ export default function BranchName() {
             <h1>{pageTitle}</h1>
             <fieldset>
               <legend>Backlog</legend>
-              <div className="backlog-item">
+              <div className={styles['backlog-item']}>
                 <Checkbox
                   labelText="親課題あり"
                   initChecked={hasParent}
@@ -176,7 +168,9 @@ export default function BranchName() {
                 />
               </div>
               <div className={styles['backlog-item']}>
-                <h3>ブランチの種類1: </h3>
+                <label className={styles['backlog-item-label']}>
+                  ブランチの種類1:{' '}
+                </label>
                 <PulldownMenu
                   initValue={branchType1Text}
                   isDisabled={false}
@@ -185,7 +179,9 @@ export default function BranchName() {
                 />
               </div>
               <div className={styles['backlog-item']}>
-                <h3>ブランチの種類2: </h3>
+                <label className={styles['backlog-item-label']}>
+                  ブランチの種類2:{' '}
+                </label>
                 <PulldownMenu
                   initValue={branchType2Text}
                   isDisabled={false}
@@ -244,77 +240,112 @@ export default function BranchName() {
             </fieldset>
             <div>
               <h3>git, ブランチ関連</h3>
-              <ul>
-                <li>
+              <ul className={styles['list']}>
+                <li onClick={() => handleClickListItem(focusBranchName)}>
                   {focusBranchName}
                   <i className="fas fa-copy"></i>
                 </li>
                 <li
-                  dangerouslySetInnerHTML={{ __html: branchName + copyIcon }}
+                  dangerouslySetInnerHTML={{
+                    __html: branchNameWithHtml + copyIcon,
+                  }}
+                  onClick={() => handleClickListItem(branchName)}
                 ></li>
                 <li
                   dangerouslySetInnerHTML={{
                     __html:
                       "git <span style='color: red;'>checkout</span> -b " +
-                      branchName +
+                      branchNameWithHtml +
                       copyIcon,
                   }}
+                  onClick={() =>
+                    handleClickListItem(`git checkout -b ${branchName}`)
+                  }
                 ></li>
                 <li
                   dangerouslySetInnerHTML={{
                     __html:
                       "git <span style='color: red;'>pull</span> origin " +
-                      branchName +
+                      branchNameWithHtml +
                       copyIcon,
                   }}
+                  onClick={() =>
+                    handleClickListItem(`git pull origin ${branchName}`)
+                  }
                 ></li>
                 <li
                   dangerouslySetInnerHTML={{
                     __html:
                       "git <span style='color: red;'>push</span> --set-upstream origin " +
-                      branchName +
+                      branchNameWithHtml +
                       copyIcon,
                   }}
+                  onClick={() =>
+                    handleClickListItem(
+                      `git push --set-upstream origin ${branchName}`,
+                    )
+                  }
                 ></li>
                 <li
                   dangerouslySetInnerHTML={{
                     __html:
                       'git commit -m "' + focusBranchName + ' hoge"' + copyIcon,
                   }}
+                  onClick={() =>
+                    handleClickListItem(
+                      `git commit -m "${focusBranchName} hoge"`,
+                    )
+                  }
                 ></li>
-                <li>
+                <li
+                  onClick={() => handleClickListItem('git pull origin master')}
+                >
                   <span>
                     git pull origin{' '}
                     <span className={styles['text-red']}>master</span>
                   </span>
                   <i className="fas fa-copy"></i>
                 </li>
-                <li>
+                <li onClick={() => handleClickListItem('git stash -u')}>
                   <span>git stash -u</span>
                   <i className="fas fa-copy"></i>
                 </li>
-                <li>
+                <li
+                  onClick={() =>
+                    handleClickListItem('git stash apply stash@{0}')
+                  }
+                >
                   <span>git stash apply stash@{0}</span>
                   <i className="fas fa-copy"></i>
                 </li>
               </ul>
               <h3>その他</h3>
-              <ul>
-                <li>
+              <ul className={styles['list']}>
+                <li onClick={() => handleClickListItem('npm run compile:sass')}>
                   <span>
                     npm run compile
                     <span className={styles['text-red']}>:sass</span>
                   </span>
                   <i className="fas fa-copy"></i>
                 </li>
-                <li>
+                <li
+                  onClick={() =>
+                    handleClickListItem('npm run compile:baseSass')
+                  }
+                >
                   <span>
                     npm run compile
                     <span className={styles['text-red']}>:baseSass</span>
                   </span>
                   <i className="fas fa-copy"></i>
                 </li>
-                <li>
+                <li
+                  onClick={() =>
+                    handleClickListItem(
+                      'psql -U postgres -d postgres -h localhost -d kumu2',
+                    )
+                  }
+                >
                   <span>
                     psql -U postgres -d postgres -h localhost -d kumu2
                   </span>
