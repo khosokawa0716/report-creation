@@ -554,7 +554,7 @@ ${fromName}`
                         className={`${styles['task-content']} ${styles['task-project']}`}
                       >
                         <div className={styles['task-project-type']}>
-                          <h3>プロジェクト</h3>
+                          <label>プロジェクト</label>
                           <PulldownMenu
                             initValue={_task.project}
                             isDisabled={!_task.isBacklog}
@@ -747,54 +747,56 @@ ${fromName}`
                   <div className={styles['operating-times']}>
                     {operatingTimes.map((_operatingTime, index) => (
                       <div className={styles['operating-time']} key={index}>
-                        <h3>稼働時間{index + 1}</h3>
-                        <InputTime
-                          initValue={_operatingTime.startHour}
-                          type="hour"
-                          handleChange={(e) =>
-                            setOperatingTimesContent(
-                              'startHour',
-                              e.target.value,
-                              index,
-                            )
-                          }
-                        />
-                        :
-                        <InputTime
-                          initValue={_operatingTime.startMinute}
-                          type="minute"
-                          handleChange={(e) =>
-                            setOperatingTimesContent(
-                              'startMinute',
-                              e.target.value,
-                              index,
-                            )
-                          }
-                        />
-                        〜
-                        <InputTime
-                          initValue={_operatingTime.endHour}
-                          type="hour"
-                          handleChange={(e) =>
-                            setOperatingTimesContent(
-                              'endHour',
-                              e.target.value,
-                              index,
-                            )
-                          }
-                        />
-                        :
-                        <InputTime
-                          initValue={_operatingTime.endMinute}
-                          type="minute"
-                          handleChange={(e) =>
-                            setOperatingTimesContent(
-                              'endMinute',
-                              e.target.value,
-                              index,
-                            )
-                          }
-                        />
+                        <label>稼働時間{index + 1}</label>
+                        <div>
+                          <InputTime
+                            initValue={_operatingTime.startHour}
+                            type="hour"
+                            handleChange={(e) =>
+                              setOperatingTimesContent(
+                                'startHour',
+                                e.target.value,
+                                index,
+                              )
+                            }
+                          />
+                          :
+                          <InputTime
+                            initValue={_operatingTime.startMinute}
+                            type="minute"
+                            handleChange={(e) =>
+                              setOperatingTimesContent(
+                                'startMinute',
+                                e.target.value,
+                                index,
+                              )
+                            }
+                          />
+                          〜
+                          <InputTime
+                            initValue={_operatingTime.endHour}
+                            type="hour"
+                            handleChange={(e) =>
+                              setOperatingTimesContent(
+                                'endHour',
+                                e.target.value,
+                                index,
+                              )
+                            }
+                          />
+                          :
+                          <InputTime
+                            initValue={_operatingTime.endMinute}
+                            type="minute"
+                            handleChange={(e) =>
+                              setOperatingTimesContent(
+                                'endMinute',
+                                e.target.value,
+                                index,
+                              )
+                            }
+                          />
+                        </div>
                       </div>
                     ))}
                     <Button
@@ -823,54 +825,56 @@ ${fromName}`
                     {isRestTime &&
                       restTimes.map((_restTime, index) => (
                         <div className={styles['rest-time']} key={index}>
-                          <h3>追加休憩{index + 1}</h3>
-                          <InputTime
-                            initValue={_restTime.startHour}
-                            type="hour"
-                            handleChange={(e) =>
-                              setRestTimesContent(
-                                'startHour',
-                                e.target.value,
-                                index,
-                              )
-                            }
-                          />
-                          :
-                          <InputTime
-                            initValue={_restTime.startMinute}
-                            type="minute"
-                            handleChange={(e) =>
-                              setRestTimesContent(
-                                'startMinute',
-                                e.target.value,
-                                index,
-                              )
-                            }
-                          />
-                          〜
-                          <InputTime
-                            initValue={_restTime.endHour}
-                            type="hour"
-                            handleChange={(e) =>
-                              setRestTimesContent(
-                                'endHour',
-                                e.target.value,
-                                index,
-                              )
-                            }
-                          />
-                          :
-                          <InputTime
-                            initValue={_restTime.endMinute}
-                            type="minute"
-                            handleChange={(e) =>
-                              setRestTimesContent(
-                                'endMinute',
-                                e.target.value,
-                                index,
-                              )
-                            }
-                          />
+                          <label>追加休憩{index + 1}</label>
+                          <div>
+                            <InputTime
+                              initValue={_restTime.startHour}
+                              type="hour"
+                              handleChange={(e) =>
+                                setRestTimesContent(
+                                  'startHour',
+                                  e.target.value,
+                                  index,
+                                )
+                              }
+                            />
+                            :
+                            <InputTime
+                              initValue={_restTime.startMinute}
+                              type="minute"
+                              handleChange={(e) =>
+                                setRestTimesContent(
+                                  'startMinute',
+                                  e.target.value,
+                                  index,
+                                )
+                              }
+                            />
+                            〜
+                            <InputTime
+                              initValue={_restTime.endHour}
+                              type="hour"
+                              handleChange={(e) =>
+                                setRestTimesContent(
+                                  'endHour',
+                                  e.target.value,
+                                  index,
+                                )
+                              }
+                            />
+                            :
+                            <InputTime
+                              initValue={_restTime.endMinute}
+                              type="minute"
+                              handleChange={(e) =>
+                                setRestTimesContent(
+                                  'endMinute',
+                                  e.target.value,
+                                  index,
+                                )
+                              }
+                            />
+                          </div>
                         </div>
                       ))}
                     {isRestTime && (
