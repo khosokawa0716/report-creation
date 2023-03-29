@@ -105,7 +105,7 @@ export default function BranchName() {
       case 'F2023':
         return 'FUTURE_DEVELOP_GOALS_2023'
       case 'MKPL':
-        return 'MKPL_MAINTE_DEV3'
+        return 'MKPL_MAINTE_DEV'
       default:
         return branchType2Text
     }
@@ -295,6 +295,17 @@ export default function BranchName() {
                     handleClickListItem(
                       `git commit -m "${focusBranchName} hoge"`,
                     )
+                  }
+                ></li>
+                <li
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      "git <span style='color: red;'>checkout</span> -b " +
+                      branchNameWithHtml + " origin/" + branchNameWithHtml + 
+                      copyIcon,
+                  }}
+                  onClick={() =>
+                    handleClickListItem(`git checkout -b ${branchName} origin/${branchName}`)
                   }
                 ></li>
                 <li
