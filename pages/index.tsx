@@ -86,9 +86,6 @@ export default function Home() {
       setCarbonCopy(importData.carbonCopy)
       setToName(importData.toName)
       setFromName(importData.fromName)
-      setOperatingTimes(importData.operatingTimes)
-      setIsRestTime(importData.isRestTime)
-      setRestTimes(importData.restTimes)
       setTasks(importData.tasks)
       setComment(importData.comment)
     })
@@ -114,9 +111,6 @@ export default function Home() {
       carbonCopy,
       toName,
       fromName,
-      operatingTimes,
-      isRestTime,
-      restTimes,
       tasks,
       comment,
     }
@@ -332,89 +326,87 @@ export default function Home() {
     const date = String(today.getDate())
     return `${year}/${month}/${date}`
   }
+  const formatTime = (hour: string, minute: string): string => {
+    return `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`
+  }
   const getOperatingTimes = (): string => {
-    let result = ''
-    operatingTimes.forEach((time) => {
-      const timeStr = `${time.startHour}:${time.startMinute}〜${time.endHour}:${time.endMinute}`
-      result = result + timeStr
-    })
-    return result
+    return operatingTimes
+      .map(
+        (time) =>
+          `${formatTime(time.startHour, time.startMinute)}〜${formatTime(
+            time.endHour,
+            time.endMinute,
+          )}`,
+      )
+      .join('\n')
   }
   const getRestTimes = (): string => {
-    let result = '【追加休憩】\n'
-    restTimes.forEach((time) => {
-      const timeStr =
-        `${time.startHour}:${time.startMinute}〜${time.endHour}:${time.endMinute}` +
-        '\n'
-      result = result + timeStr
-    })
-    return result
+    return (
+      '【追加休憩】\n' +
+      restTimes
+        .map(
+          (time) =>
+            `${formatTime(time.startHour, time.startMinute)}〜${formatTime(
+              time.endHour,
+              time.endMinute,
+            )}`,
+        )
+        .join('\n')
+    )
   }
   const getMonthTasks = (): string => {
-    let result = ''
-    tasks.forEach((task) => {
-      if (task.isMonth) {
-        const taskStr = `・${task.name}（${task.monthTarget}/100）\n`
-        result = result + taskStr
-      }
-    })
-    return result
+    return tasks
+      .filter((task) => task.isMonth)
+      .map((task) => `・${task.name}（${task.monthTarget}/100）`)
+      .join('\n')
   }
   const getWeekTasks = (): string => {
-    let result = ''
-    tasks.forEach((task) => {
-      if (task.isWeek) {
-        const taskStr = `・${task.name}（${task.weekTarget}/100）\n`
-        result = result + taskStr
-      }
-    })
-    return result
+    return tasks
+      .filter((task) => task.isWeek)
+      .map((task) => `・${task.name}（${task.weekTarget}/100）`)
+      .join('\n')
   }
   const getTodayProgress = (): string => {
-    let result = ''
-    tasks.forEach((task) => {
-      const url = `https://kumukumu.backlog.com/view/${task.project}-${task.backlogNumber}\n`
-      const taskStr = `・${task.name}（${task.todayTarget}/100）\n`
-      if (task.isToday && task.isBacklog) {
-        result = result + taskStr + url
-      } else if (task.isToday && !task.isBacklog) {
-        result = result + taskStr
-      }
-    })
-    return result
+    return tasks
+      .filter((task) => task.isToday)
+      .map((task) => {
+        const progress = `・${task.name}（${task.todayTarget}/100）`
+        return task.isBacklog
+          ? `${progress}\nhttps://kumukumu.backlog.com/view/${task.project}-${task.backlogNumber}\n`
+          : `${progress}\n`
+      })
+      .join('')
   }
   const getTodayReport = (): string => {
-    let result = ''
-    tasks.forEach((task) => {
-      if (task.isToday) {
-        const taskStr = `・${task.name}\n${task.todayProgress}\n`
-        result = result + taskStr
-      }
-    })
-    return result
+    return tasks
+      .filter((task) => task.isToday)
+      .map((task) => `・${task.name}\n${task.todayProgress}`)
+      .join('\n')
   }
   const getNextTasks = (): string => {
-    let result = ''
-    tasks.forEach((task) => {
-      const url = `https://kumukumu.backlog.com/view/${task.project}-${task.backlogNumber}\n`
-      const taskStr = `・${task.name}（${task.nextTarget}/100）\n`
-      if (task.isNext && task.isBacklog) {
-        result = result + taskStr + url
-      } else if (task.isNext && !task.isBacklog) {
-        result = result + taskStr
-      }
-    })
-    return result
+    return tasks
+      .filter((task) => task.isNext)
+      .map((task) => {
+        const progress = `・${task.name}（${task.nextTarget}/100）`
+        return task.isBacklog
+          ? `${progress}\nhttps://kumukumu.backlog.com/view/${task.project}-${task.backlogNumber}\n`
+          : `${progress}\n`
+      })
+      .join('')
   }
-  const getGreeting = (): string => {
+  type GreetingMessage =
+    | '明日も宜しくお願い致します。'
+    | '来週も宜しくお願い致します。'
+  const getGreeting = (): GreetingMessage => {
     const today = new Date()
-    const day = today.getDay()
-    if (day === 5 || day === 6) {
-      return '来週も宜しくお願い致します。'
-    } else {
-      return '明日も宜しくお願い致します。'
-    }
+    const dayOfWeek = today.getDay()
+    const message: GreetingMessage =
+      dayOfWeek === 5 || dayOfWeek === 6
+        ? '来週も宜しくお願い致します。'
+        : '明日も宜しくお願い致します。'
+    return message
   }
+
   let operatingTimesStr = getOperatingTimes()
   let restTimesStr = isRestTime ? getRestTimes() : ''
   const dateStr = getDateStr()
@@ -898,6 +890,11 @@ ${fromName}`
                       </>
                     )}
                   </div>
+                  <p>
+                    ※稼働時間と追加休憩は、データ読み込み時に保存されません。
+                    <br />
+                    メール作成の直前に入力してください。
+                  </p>
                 </div>
                 <div className="others">
                   <div className={styles.other}>

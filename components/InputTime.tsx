@@ -12,7 +12,7 @@ export default function InputTime({
   handleChange,
 }: InputProps) {
   const optionItems = () => {
-    const hours = [...Array(24)].map((_, i) => String(i).padStart(2, '0'))
+    const hours = [...Array(24)].map((_, i) => i)
     const minutes = ['00', '15', '30', '45']
     const times = type === 'hour' ? hours : minutes
     return times.map((time, index) => (
