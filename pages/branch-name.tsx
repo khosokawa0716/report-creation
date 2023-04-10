@@ -301,11 +301,15 @@ export default function BranchName() {
                   dangerouslySetInnerHTML={{
                     __html:
                       "git <span style='color: red;'>checkout</span> -b " +
-                      branchNameWithHtml + " origin/" + branchNameWithHtml + 
+                      branchNameWithHtml +
+                      ' origin/' +
+                      branchNameWithHtml +
                       copyIcon,
                   }}
                   onClick={() =>
-                    handleClickListItem(`git checkout -b ${branchName} origin/${branchName}`)
+                    handleClickListItem(
+                      `git checkout -b ${branchName} origin/${branchName}`,
+                    )
                   }
                 ></li>
                 <li
