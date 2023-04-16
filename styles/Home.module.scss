@@ -107,17 +107,6 @@
   margin-right: 5px;
 }
 
-.task-backlog {
-  position: relative;
-}
-
-.task-link {
-  position: absolute;
-  left: 0;
-  top: 25px;
-  white-space: nowrap;
-}
-
 .target-group {
   display: flex;
 }
@@ -154,9 +143,11 @@
   margin-bottom: 10px;
 }
 
-.task-link,
-.task-link-summary,
-.footer-link {
+.task-link-wrapper {
+  margin-top: 0;
+}
+
+.link {
   margin-left: 10px;
   color: #0076ba;
   &:hover {

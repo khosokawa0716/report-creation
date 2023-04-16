@@ -535,9 +535,9 @@ ${fromName}`
                             <>
                               {_task.name}
                               {_task.isBacklog && (
-                                <p>
+                                <p className={styles['task-link-wrapper']}>
                                   <a
-                                    className={styles['task-link-summary']}
+                                    className={styles.link}
                                     rel="noreferrer"
                                     target="_blank"
                                     href={`https://kumukumu.backlog.com/view/${_task.project}-${_task.backlogNumber}`}
@@ -564,6 +564,18 @@ ${fromName}`
                             }
                           />
                         </div>
+                        <Checkbox
+                          labelText="Backlogの有無"
+                          initChecked={_task.isBacklog}
+                          handleChange={(e) =>
+                            setTaskContent(
+                              'isBacklog',
+                              index,
+                              '',
+                              e.target.checked,
+                            )
+                          }
+                        />
                         <div
                           className={`${styles['task-content']} ${styles['task-project']}`}
                         >
@@ -590,28 +602,6 @@ ${fromName}`
                               )
                             }}
                           />
-                          <div className={styles['task-backlog']}>
-                            <Checkbox
-                              labelText="Backlogの有無"
-                              initChecked={_task.isBacklog}
-                              handleChange={(e) =>
-                                setTaskContent(
-                                  'isBacklog',
-                                  index,
-                                  '',
-                                  e.target.checked,
-                                )
-                              }
-                            />
-                            {_task.isBacklog && (
-                              <a
-                                className={styles['task-link']}
-                                rel="noreferrer"
-                                target="_blank"
-                                href={`https://kumukumu.backlog.com/view/${_task.project}-${_task.backlogNumber}`}
-                              >{`https://kumukumu.backlog.com/view/${_task.project}-${_task.backlogNumber}`}</a>
-                            )}
-                          </div>
                         </div>
                         <div className={styles['task-content']}>
                           <div className={styles['target-group']}>
@@ -901,17 +891,17 @@ ${fromName}`
                     メール作成の直前に入力してください。
                   </p>
                 </div>
+                <div className={styles.other}>
+                  <TextArea
+                    labelText="コメント"
+                    borderColor="gray"
+                    initValue={comment}
+                    handleChange={(e) => setComment(e.target.value)}
+                  />
+                </div>
                 <details>
                   <summary>宛先や名前</summary>
                   <div className="others">
-                    <div className={styles.other}>
-                      <TextArea
-                        labelText="コメント"
-                        borderColor="gray"
-                        initValue={comment}
-                        handleChange={(e) => setComment(e.target.value)}
-                      />
-                    </div>
                     <div className={styles.other}>
                       <InputText
                         labelText="宛先"
@@ -1002,11 +992,11 @@ ${fromName}`
           href="https://github.com/khosokawa0716/report-creation#readme"
           rel="noreferrer"
           target="_blank"
-          className={styles['footer-link']}
+          className={styles.link}
         >
           README!
         </a>
-        <a href="./branch-name" className={styles['footer-link']}>
+        <a href="./branch-name" className={styles.link}>
           ブランチ名作成ツール
         </a>
       </footer>
