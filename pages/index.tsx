@@ -5,6 +5,7 @@ import InputTime from '../components/InputTime'
 import InputPassword from '../components/InputPassword'
 import TextArea from '../components/TextArea'
 import Button from '../components/Button'
+import ButtonIcon from '../components/ButtonIcon'
 import PulldownMenu from '../components/PulldownMenu'
 import Checkbox from '../components/Checkbox'
 import Range from '../components/Range'
@@ -528,212 +529,228 @@ ${fromName}`
                 <div className={styles.tasks}>
                   {filteredTasks.map((_task, index) => (
                     <div className={styles.task} key={index}>
-                      <div className={styles['task-content']}>
-                        <span className={styles['task-count']}>
-                          {String(_task.name.length)}/256
-                        </span>
-                        <InputText
-                          labelText={`タスク${index + 1}`}
-                          maxLength={256}
-                          borderColor="blue"
-                          initValue={_task.name}
-                          handleChange={(e) =>
-                            setTaskContent('name', index, e.target.value)
-                          }
-                        />
-                      </div>
-                      <div
-                        className={`${styles['task-content']} ${styles['task-project']}`}
-                      >
-                        <div className={styles['task-project-type']}>
-                          <label>プロジェクト</label>
-                          <PulldownMenu
-                            initValue={_task.project}
-                            isDisabled={!_task.isBacklog}
-                            options={projects}
+                      <details>
+                        <summary>
+                          {!!_task.name && (
+                            <>
+                              {_task.name}
+                              {_task.isBacklog && (
+                                <p>
+                                  <a
+                                    className={styles['task-link-summary']}
+                                    rel="noreferrer"
+                                    target="_blank"
+                                    href={`https://kumukumu.backlog.com/view/${_task.project}-${_task.backlogNumber}`}
+                                  >
+                                    {`https://kumukumu.backlog.com/view/${_task.project}-${_task.backlogNumber}`}
+                                  </a>
+                                </p>
+                              )}
+                            </>
+                          )}
+                          {!_task.name && <>タスク名が未入力です。</>}
+                        </summary>
+                        <div className={styles['task-content']}>
+                          <span className={styles['task-count']}>
+                            {String(_task.name.length)}/256
+                          </span>
+                          <InputText
+                            labelText={`タスク${index + 1}`}
+                            maxLength={256}
+                            borderColor="blue"
+                            initValue={_task.name}
                             handleChange={(e) =>
-                              setTaskContent('project', index, e.target.value)
+                              setTaskContent('name', index, e.target.value)
                             }
                           />
                         </div>
-                        <InputNumber
-                          labelText="番号"
-                          initValue={_task.backlogNumber}
-                          isDisabled={!_task.isBacklog}
-                          handleChange={(e) => {
-                            setTaskContent(
-                              'backlogNumber',
-                              index,
-                              e.target.value,
-                            )
-                          }}
-                        />
-                        <div className={styles['task-backlog']}>
-                          <Checkbox
-                            labelText="Backlogの有無"
-                            initChecked={_task.isBacklog}
+                        <div
+                          className={`${styles['task-content']} ${styles['task-project']}`}
+                        >
+                          <div className={styles['task-project-type']}>
+                            <label>プロジェクト</label>
+                            <PulldownMenu
+                              initValue={_task.project}
+                              isDisabled={!_task.isBacklog}
+                              options={projects}
+                              handleChange={(e) =>
+                                setTaskContent('project', index, e.target.value)
+                              }
+                            />
+                          </div>
+                          <InputNumber
+                            labelText="番号"
+                            initValue={_task.backlogNumber}
+                            isDisabled={!_task.isBacklog}
+                            handleChange={(e) => {
+                              setTaskContent(
+                                'backlogNumber',
+                                index,
+                                e.target.value,
+                              )
+                            }}
+                          />
+                          <div className={styles['task-backlog']}>
+                            <Checkbox
+                              labelText="Backlogの有無"
+                              initChecked={_task.isBacklog}
+                              handleChange={(e) =>
+                                setTaskContent(
+                                  'isBacklog',
+                                  index,
+                                  '',
+                                  e.target.checked,
+                                )
+                              }
+                            />
+                            {_task.isBacklog && (
+                              <a
+                                className={styles['task-link']}
+                                rel="noreferrer"
+                                target="_blank"
+                                href={`https://kumukumu.backlog.com/view/${_task.project}-${_task.backlogNumber}`}
+                              >{`https://kumukumu.backlog.com/view/${_task.project}-${_task.backlogNumber}`}</a>
+                            )}
+                          </div>
+                        </div>
+                        <div className={styles['task-content']}>
+                          <div className={styles['target-group']}>
+                            <div className={styles.target}>
+                              <Checkbox
+                                labelText="今月"
+                                initChecked={_task.isMonth}
+                                handleChange={(e) =>
+                                  setTaskContent(
+                                    'isMonth',
+                                    index,
+                                    '',
+                                    e.target.checked,
+                                  )
+                                }
+                              />
+                              <Range
+                                initValue={_task.monthTarget}
+                                handleChange={(e) =>
+                                  setTaskContent(
+                                    'monthTarget',
+                                    index,
+                                    e.target.value,
+                                  )
+                                }
+                              />
+                              <span>{_task.monthTarget}/100</span>
+                            </div>
+                            <div className={styles.target}>
+                              <Checkbox
+                                labelText="今週"
+                                initChecked={_task.isWeek}
+                                handleChange={(e) =>
+                                  setTaskContent(
+                                    'isWeek',
+                                    index,
+                                    '',
+                                    e.target.checked,
+                                  )
+                                }
+                              />
+                              <Range
+                                initValue={_task.weekTarget}
+                                handleChange={(e) =>
+                                  setTaskContent(
+                                    'weekTarget',
+                                    index,
+                                    e.target.value,
+                                  )
+                                }
+                              />
+                              <span>{_task.weekTarget}/100</span>
+                            </div>
+                          </div>
+                          <div className={styles['target-group']}>
+                            <div className={styles.target}>
+                              <Checkbox
+                                labelText="本日"
+                                initChecked={_task.isToday}
+                                handleChange={(e) =>
+                                  setTaskContent(
+                                    'isToday',
+                                    index,
+                                    '',
+                                    e.target.checked,
+                                  )
+                                }
+                              />
+                              <Range
+                                initValue={_task.todayTarget}
+                                handleChange={(e) =>
+                                  setTaskContent(
+                                    'todayTarget',
+                                    index,
+                                    e.target.value,
+                                  )
+                                }
+                              />
+                              <span>{_task.todayTarget}/100</span>
+                            </div>
+                            <div className={styles.target}>
+                              <Checkbox
+                                labelText="予定"
+                                initChecked={_task.isNext}
+                                handleChange={(e) =>
+                                  setTaskContent(
+                                    'isNext',
+                                    index,
+                                    '',
+                                    e.target.checked,
+                                  )
+                                }
+                              />
+                              <Range
+                                initValue={_task.nextTarget}
+                                handleChange={(e) =>
+                                  setTaskContent(
+                                    'nextTarget',
+                                    index,
+                                    e.target.value,
+                                  )
+                                }
+                              />
+                              <span>{_task.nextTarget}/100</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className={styles['task-content']}>
+                          <span className={styles['task-count']}>
+                            {String(_task.todayProgress.length)}/2000
+                          </span>
+                          <TextArea
+                            labelText="報告"
+                            isDisabled={!_task.isToday}
+                            maxLength={2000}
+                            borderColor="blue"
+                            initValue={_task.todayProgress}
                             handleChange={(e) =>
                               setTaskContent(
-                                'isBacklog',
+                                'todayProgress',
                                 index,
-                                '',
-                                e.target.checked,
+                                e.target.value,
                               )
                             }
                           />
-                          {_task.isBacklog && (
-                            <a
-                              className={styles['task-link']}
-                              rel="noreferrer"
-                              target="_blank"
-                              href={`https://kumukumu.backlog.com/view/${_task.project}-${_task.backlogNumber}`}
-                            >{`https://kumukumu.backlog.com/view/${_task.project}-${_task.backlogNumber}`}</a>
-                          )}
                         </div>
-                      </div>
-                      <div className={styles['task-content']}>
-                        <div className={styles['target-group']}>
-                          <div className={styles.target}>
-                            <Checkbox
-                              labelText="今月"
-                              initChecked={_task.isMonth}
-                              handleChange={(e) =>
-                                setTaskContent(
-                                  'isMonth',
-                                  index,
-                                  '',
-                                  e.target.checked,
-                                )
-                              }
-                            />
-                            <Range
-                              initValue={_task.monthTarget}
-                              handleChange={(e) =>
-                                setTaskContent(
-                                  'monthTarget',
-                                  index,
-                                  e.target.value,
-                                )
-                              }
-                            />
-                            <span>{_task.monthTarget}/100</span>
-                          </div>
-                          <div className={styles.target}>
-                            <Checkbox
-                              labelText="今週"
-                              initChecked={_task.isWeek}
-                              handleChange={(e) =>
-                                setTaskContent(
-                                  'isWeek',
-                                  index,
-                                  '',
-                                  e.target.checked,
-                                )
-                              }
-                            />
-                            <Range
-                              initValue={_task.weekTarget}
-                              handleChange={(e) =>
-                                setTaskContent(
-                                  'weekTarget',
-                                  index,
-                                  e.target.value,
-                                )
-                              }
-                            />
-                            <span>{_task.weekTarget}/100</span>
-                          </div>
-                        </div>
-                        <div className={styles['target-group']}>
-                          <div className={styles.target}>
-                            <Checkbox
-                              labelText="本日"
-                              initChecked={_task.isToday}
-                              handleChange={(e) =>
-                                setTaskContent(
-                                  'isToday',
-                                  index,
-                                  '',
-                                  e.target.checked,
-                                )
-                              }
-                            />
-                            <Range
-                              initValue={_task.todayTarget}
-                              handleChange={(e) =>
-                                setTaskContent(
-                                  'todayTarget',
-                                  index,
-                                  e.target.value,
-                                )
-                              }
-                            />
-                            <span>{_task.todayTarget}/100</span>
-                          </div>
-                          <div className={styles.target}>
-                            <Checkbox
-                              labelText="予定"
-                              initChecked={_task.isNext}
-                              handleChange={(e) =>
-                                setTaskContent(
-                                  'isNext',
-                                  index,
-                                  '',
-                                  e.target.checked,
-                                )
-                              }
-                            />
-                            <Range
-                              initValue={_task.nextTarget}
-                              handleChange={(e) =>
-                                setTaskContent(
-                                  'nextTarget',
-                                  index,
-                                  e.target.value,
-                                )
-                              }
-                            />
-                            <span>{_task.nextTarget}/100</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className={styles['task-content']}>
-                        <span className={styles['task-count']}>
-                          {String(_task.todayProgress.length)}/2000
-                        </span>
-                        <TextArea
-                          labelText="報告"
-                          isDisabled={!_task.isToday}
-                          maxLength={2000}
-                          borderColor="blue"
-                          initValue={_task.todayProgress}
-                          handleChange={(e) =>
-                            setTaskContent(
-                              'todayProgress',
-                              index,
-                              e.target.value,
-                            )
-                          }
-                        />
-                      </div>
-                      <Button
-                        disabled={tasks.length <= 1}
-                        isSmall
-                        backGroundColor="red"
-                        handleClick={() => showModalCaution(index)}
-                      >
-                        削除
-                      </Button>
+                        <ButtonIcon
+                          disabled={tasks.length <= 1}
+                          iconType="delete"
+                          handleClick={() => showModalCaution(index)}
+                        ></ButtonIcon>
+                      </details>
                     </div>
                   ))}
-                  <Button
+                  <ButtonIcon
                     disabled={tasks.length >= 100}
-                    isSmall
-                    backGroundColor="blue"
+                    iconType="add"
                     handleClick={addTask}
-                  >
-                    追加
-                  </Button>
+                  />
                 </div>
                 <div className={styles.times}>
                   <div className={styles['operating-times']}>
@@ -791,22 +808,16 @@ ${fromName}`
                         </div>
                       </div>
                     ))}
-                    <Button
+                    <ButtonIcon
                       disabled={operatingTimes.length >= 5}
-                      isSmall
-                      backGroundColor="green"
+                      iconType="add"
                       handleClick={addOperatingTime}
-                    >
-                      追加
-                    </Button>
-                    <Button
+                    />
+                    <ButtonIcon
                       disabled={operatingTimes.length <= 1}
-                      isSmall
-                      backGroundColor="red"
+                      iconType="delete"
                       handleClick={deleteOperatingTime}
-                    >
-                      削除
-                    </Button>
+                    />
                   </div>
                   <div className={styles['rest-times']}>
                     <Checkbox
@@ -871,22 +882,16 @@ ${fromName}`
                       ))}
                     {isRestTime && (
                       <>
-                        <Button
+                        <ButtonIcon
                           disabled={restTimes.length >= 5}
-                          isSmall
-                          backGroundColor="green"
+                          iconType="add"
                           handleClick={addRestTime}
-                        >
-                          追加
-                        </Button>
-                        <Button
+                        />
+                        <ButtonIcon
                           disabled={restTimes.length <= 1}
-                          isSmall
-                          backGroundColor="red"
+                          iconType="delete"
                           handleClick={deleteRestTime}
-                        >
-                          削除
-                        </Button>
+                        />
                       </>
                     )}
                   </div>
@@ -896,48 +901,51 @@ ${fromName}`
                     メール作成の直前に入力してください。
                   </p>
                 </div>
-                <div className="others">
-                  <div className={styles.other}>
-                    <TextArea
-                      labelText="コメント"
-                      borderColor="gray"
-                      initValue={comment}
-                      handleChange={(e) => setComment(e.target.value)}
-                    />
+                <details>
+                  <summary>宛先や名前</summary>
+                  <div className="others">
+                    <div className={styles.other}>
+                      <TextArea
+                        labelText="コメント"
+                        borderColor="gray"
+                        initValue={comment}
+                        handleChange={(e) => setComment(e.target.value)}
+                      />
+                    </div>
+                    <div className={styles.other}>
+                      <InputText
+                        labelText="宛先"
+                        borderColor="gray"
+                        initValue={address}
+                        handleChange={(e) => setAddress(e.target.value)}
+                      />
+                    </div>
+                    <div className={styles.other}>
+                      <InputText
+                        labelText="CC"
+                        borderColor="gray"
+                        initValue={carbonCopy}
+                        handleChange={(e) => setCarbonCopy(e.target.value)}
+                      />
+                    </div>
+                    <div className={styles.other}>
+                      <InputText
+                        labelText="宛先の人の名前"
+                        borderColor="gray"
+                        initValue={toName}
+                        handleChange={(e) => setToName(e.target.value)}
+                      />
+                    </div>
+                    <div className={styles.other}>
+                      <InputText
+                        labelText="自分の名前"
+                        borderColor="gray"
+                        initValue={fromName}
+                        handleChange={(e) => setFromName(e.target.value)}
+                      />
+                    </div>
                   </div>
-                  <div className={styles.other}>
-                    <InputText
-                      labelText="宛先"
-                      borderColor="gray"
-                      initValue={address}
-                      handleChange={(e) => setAddress(e.target.value)}
-                    />
-                  </div>
-                  <div className={styles.other}>
-                    <InputText
-                      labelText="CC"
-                      borderColor="gray"
-                      initValue={carbonCopy}
-                      handleChange={(e) => setCarbonCopy(e.target.value)}
-                    />
-                  </div>
-                  <div className={styles.other}>
-                    <InputText
-                      labelText="宛先の人の名前"
-                      borderColor="gray"
-                      initValue={toName}
-                      handleChange={(e) => setToName(e.target.value)}
-                    />
-                  </div>
-                  <div className={styles.other}>
-                    <InputText
-                      labelText="自分の名前"
-                      borderColor="gray"
-                      initValue={fromName}
-                      handleChange={(e) => setFromName(e.target.value)}
-                    />
-                  </div>
-                </div>
+                </details>
               </div>
             )}
             {isShowPreview && (

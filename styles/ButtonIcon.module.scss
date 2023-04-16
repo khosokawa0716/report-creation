@@ -1,0 +1,27 @@
+.com-button-icon {
+  height: 30px;
+  width: 30px;
+  padding: 8px;
+  border-radius: 4px;
+  color: #ffffff;
+  border: none;
+  &:not(.disabled) {
+    cursor: pointer;
+  }
+}
+.add,
+.save {
+  background-color: #0076ba;
+}
+.edit {
+  background-color: #017110;
+}
+.cancel {
+  background-color: #ed220d;
+}
+.delete {
+  background-color: #666666;
+}
+.disabled {
+  background-color: #cccccc;
+}
