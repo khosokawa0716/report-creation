@@ -42,7 +42,20 @@ export default function BranchName() {
   }, [])
 
   const [hasParent, setHasParent] = useState(true)
+  const yearLastDigits: string = (new Date()).getFullYear().toString().slice(-2)
   const branchType1 = [
+    {
+      label: `feature${yearLastDigits}`,
+      value: `feature${yearLastDigits}`,
+    },
+    {
+      label: `bugfix${yearLastDigits}`,
+      value: `bugfix${yearLastDigits}`,
+    },
+    {
+      label: `hotfix${yearLastDigits}`,
+      value: `hotfix${yearLastDigits}`,
+    },
     {
       label: 'feature',
       value: 'feature',
@@ -121,12 +134,21 @@ export default function BranchName() {
   const parentBranchName = `${branchType2Text}-${parentBacklogNumber}`
   const childBranchName = `${branchType2Text}-${childBacklogNumber}`
   const focusBranchName = hasParent ? childBranchName : parentBranchName
+  const getBranchText = (branchTypeText: string, yearDigits: string): string => {
+    if (branchTypeText.includes(yearDigits)) {
+      const currentMonth = (new Date().getMonth() + 1).toString().padStart(2, '0')
+      return `${branchTypeText}/${currentMonth}`
+    } else {
+      return branchTypeText
+    }
+  }
+  const branch1Text = getBranchText(branchType1Text, yearLastDigits);
   const branchNameWithHtml = hasParent
-    ? `${branchType1Text}/<span style='color: red;'>#</span>${parentBranchName}/${childBranchName}`
-    : `${branchType1Text}/${parentBranchName}`
+    ? `${branch1Text}/<span style='color: red;'>#</span>${parentBranchName}/${childBranchName}`
+    : `${branch1Text}/${parentBranchName}`
   const branchName = hasParent
-    ? `${branchType1Text}/#${parentBranchName}/${childBranchName}`
-    : `${branchType1Text}/${parentBranchName}`
+    ? `${branch1Text}/#${parentBranchName}/${childBranchName}`
+    : `${branch1Text}/${parentBranchName}`
   const copyIcon = "<i class='fas fa-copy'></i>"
   return (
     <div className={commonStyles.container}>
