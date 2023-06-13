@@ -2,7 +2,7 @@ import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
 import ButtonIcon from '../../components/ButtonIcon'
 
-describe('Button component', () => {
+describe('ButtonIcon component', () => {
   const handleClick = jest.fn()
   it('renders correctly with default props', () => {
     const { getByRole } = render(
