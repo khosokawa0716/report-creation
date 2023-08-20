@@ -42,7 +42,7 @@ export default function BranchName() {
   }, [])
 
   const [hasParent, setHasParent] = useState(true)
-  const yearLastDigits: string = (new Date()).getFullYear().toString().slice(-2)
+  const yearLastDigits: string = new Date().getFullYear().toString().slice(-2)
   const branchType1 = [
     {
       label: `feature${yearLastDigits}`,
@@ -78,6 +78,10 @@ export default function BranchName() {
     {
       label: 'MKPL',
       value: 'MKPL',
+    },
+    {
+      label: 'FB_MKPL',
+      value: 'FB_MKPL',
     },
     {
       label: 'CMS_DEFECT',
@@ -134,15 +138,20 @@ export default function BranchName() {
   const parentBranchName = `${branchType2Text}-${parentBacklogNumber}`
   const childBranchName = `${branchType2Text}-${childBacklogNumber}`
   const focusBranchName = hasParent ? childBranchName : parentBranchName
-  const getBranchText = (branchTypeText: string, yearDigits: string): string => {
+  const getBranchText = (
+    branchTypeText: string,
+    yearDigits: string,
+  ): string => {
     if (branchTypeText.includes(yearDigits)) {
-      const currentMonth = (new Date().getMonth() + 1).toString().padStart(2, '0')
+      const currentMonth = (new Date().getMonth() + 1)
+        .toString()
+        .padStart(2, '0')
       return `${branchTypeText}/${currentMonth}`
     } else {
       return branchTypeText
     }
   }
-  const branch1Text = getBranchText(branchType1Text, yearLastDigits);
+  const branch1Text = getBranchText(branchType1Text, yearLastDigits)
   const branchNameWithHtml = hasParent
     ? `${branch1Text}/<span style='color: red;'>#</span>${parentBranchName}/${childBranchName}`
     : `${branch1Text}/${parentBranchName}`

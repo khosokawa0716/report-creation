@@ -46,6 +46,10 @@ export default function Home() {
       value: 'MKPL_MAINTE_DEV',
     },
     {
+      label: 'FB_MKPL',
+      value: 'FB_MKPL',
+    },
+    {
       label: 'CMS_DEFECT',
       value: 'CMS_DEFECT',
     },
@@ -113,7 +117,6 @@ export default function Home() {
       toName,
       fromName,
       tasks,
-      comment,
     }
     const fileName = getFileName()
     const data = JSON.stringify(output)
