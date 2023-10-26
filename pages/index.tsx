@@ -92,7 +92,6 @@ export default function Home() {
       setToName(importData.toName)
       setFromName(importData.fromName)
       setTasks(importData.tasks)
-      setComment(importData.comment)
     })
     if (e.target.files === null) return
     file_reader.readAsText(e.target.files[0])
@@ -889,7 +888,7 @@ ${fromName}`
                     )}
                   </div>
                   <p>
-                    ※稼働時間と追加休憩は、データ読み込み時に保存されません。
+                    ※稼働時間と追加休憩、コメントは、データ読み込み時に保存されません。
                     <br />
                     メール作成の直前に入力してください。
                   </p>
