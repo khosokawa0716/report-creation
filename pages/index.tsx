@@ -391,11 +391,11 @@ export default function Home() {
         if (addNewLineUnderTask && !isLastTask) {
           return task.isBacklog
             ? `${progress}\nhttps://kumukumu.backlog.com/view/${task.project}-${task.backlogNumber}\n\n`
-            : `${progress}\n`
+            : `${progress}\n\n`
         } else {
           return task.isBacklog
             ? `${progress}\nhttps://kumukumu.backlog.com/view/${task.project}-${task.backlogNumber}\n`
-            : `${progress}`
+            : `${progress}\n`
         }
       })
       .join('')
@@ -425,11 +425,11 @@ export default function Home() {
         if (addNewLineUnderTask && !isLastTask) {
           return task.isBacklog
             ? `${progress}\nhttps://kumukumu.backlog.com/view/${task.project}-${task.backlogNumber}\n\n`
-            : `${progress}\n`
+            : `${progress}\n\n`
         } else {
           return task.isBacklog
             ? `${progress}\nhttps://kumukumu.backlog.com/view/${task.project}-${task.backlogNumber}\n`
-            : `${progress}`
+            : `${progress}\n`
         }
       })
       .join('')
