@@ -92,6 +92,8 @@ export default function Home() {
       setToName(importData.toName)
       setFromName(importData.fromName)
       setTasks(importData.tasks)
+      setAddNewLineUnderTwoTitle(importData.addNewLineUnderTwoTitle)
+      setAddNewLineUnderTask(importData.addNewLineUnderTask)
     })
     if (e.target.files === null) return
     file_reader.readAsText(e.target.files[0])
@@ -116,6 +118,8 @@ export default function Home() {
       toName,
       fromName,
       tasks,
+      addNewLineUnderTwoTitle,
+      addNewLineUnderTask,
     }
     const fileName = getFileName()
     const data = JSON.stringify(output)
@@ -357,6 +361,10 @@ export default function Home() {
         .join('\n')
     )
   }
+  const [addNewLineUnderTwoTitle, setAddNewLineUnderTwoTitle] = useState(false)
+  const getAddNewLineUnderTwoTitle = (checked: boolean) => {
+    setAddNewLineUnderTwoTitle(checked)
+  }
   const getMonthTasks = (): string => {
     return tasks
       .filter((task) => task.isMonth)
@@ -369,31 +377,56 @@ export default function Home() {
       .map((task) => `・${task.name}（${task.weekTarget}/100）`)
       .join('\n')
   }
+  const [addNewLineUnderTask, setAddNewLineUnderTask] = useState(false)
+  const getAddNewLineUnderTask = (checked: boolean) => {
+    setAddNewLineUnderTask(checked)
+  }
   const getTodayProgress = (): string => {
     return tasks
       .filter((task) => task.isToday)
       .map((task) => {
         const progress = `・${task.name}（${task.todayTarget}/100）`
-        return task.isBacklog
-          ? `${progress}\nhttps://kumukumu.backlog.com/view/${task.project}-${task.backlogNumber}\n`
-          : `${progress}\n`
+        if (addNewLineUnderTask) {
+          return task.isBacklog
+            ? `${progress}\nhttps://kumukumu.backlog.com/view/${task.project}-${task.backlogNumber}\n\n`
+            : `${progress}\n`
+        } else {
+          return task.isBacklog
+            ? `${progress}\nhttps://kumukumu.backlog.com/view/${task.project}-${task.backlogNumber}\n`
+            : `${progress}`
+        }
       })
       .join('')
   }
   const getTodayReport = (): string => {
-    return tasks
-      .filter((task) => task.isToday)
-      .map((task) => `・${task.name}\n${task.todayProgress}`)
-      .join('\n')
+    if (addNewLineUnderTask) {
+      return (
+        tasks
+          .filter((task) => task.isToday)
+          .map((task) => `・${task.name}\n${task.todayProgress}`)
+          .join('\n\n') + '\n'
+      )
+    } else {
+      return tasks
+        .filter((task) => task.isToday)
+        .map((task) => `・${task.name}\n${task.todayProgress}`)
+        .join('\n')
+    }
   }
   const getNextTasks = (): string => {
     return tasks
       .filter((task) => task.isNext)
       .map((task) => {
         const progress = `・${task.name}（${task.nextTarget}/100）`
-        return task.isBacklog
-          ? `${progress}\nhttps://kumukumu.backlog.com/view/${task.project}-${task.backlogNumber}\n`
-          : `${progress}\n`
+        if (addNewLineUnderTask) {
+          return task.isBacklog
+            ? `${progress}\nhttps://kumukumu.backlog.com/view/${task.project}-${task.backlogNumber}\n\n`
+            : `${progress}\n`
+        } else {
+          return task.isBacklog
+            ? `${progress}\nhttps://kumukumu.backlog.com/view/${task.project}-${task.backlogNumber}\n`
+            : `${progress}`
+        }
       })
       .join('')
   }
@@ -413,8 +446,12 @@ export default function Home() {
   let operatingTimesStr = getOperatingTimes()
   let restTimesStr = isRestTime ? getRestTimes() : ''
   const dateStr = getDateStr()
-  let monthTasks = getMonthTasks()
-  let weekTasks = getWeekTasks()
+  let monthTasks = addNewLineUnderTwoTitle
+    ? getMonthTasks() + '\n'
+    : getMonthTasks()
+  let weekTasks = addNewLineUnderTwoTitle
+    ? getWeekTasks() + '\n'
+    : getWeekTasks()
   let todayProgress = getTodayProgress()
   let todayReport = getTodayReport()
   let nextTasks = getNextTasks()
@@ -934,6 +971,29 @@ ${fromName}`
                         borderColor="gray"
                         initValue={fromName}
                         handleChange={(e) => setFromName(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </details>
+                <details>
+                  <summary>改行の設定</summary>
+                  <div>
+                    <div>
+                      <Checkbox
+                        labelText="今月の目標と今週の目標の下に改行を追加"
+                        initChecked={addNewLineUnderTwoTitle}
+                        handleChange={(e) =>
+                          getAddNewLineUnderTwoTitle(e.target.checked)
+                        }
+                      />
+                    </div>
+                    <div>
+                      <Checkbox
+                        labelText="タスクの下に改行を追加"
+                        initChecked={addNewLineUnderTask}
+                        handleChange={(e) =>
+                          getAddNewLineUnderTask(e.target.checked)
+                        }
                       />
                     </div>
                   </div>

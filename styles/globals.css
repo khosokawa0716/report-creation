@@ -20,6 +20,10 @@ h3 {
 * {
   box-sizing: border-box;
 }
+summary {
+  cursor: pointer;
+  user-select: none;
+}
 
 @media (prefers-color-scheme: dark) {
   html {
