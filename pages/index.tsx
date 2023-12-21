@@ -382,11 +382,13 @@ export default function Home() {
     setAddNewLineUnderTask(checked)
   }
   const getTodayProgress = (): string => {
-    return tasks
-      .filter((task) => task.isToday)
-      .map((task) => {
+    const filteredTasks = tasks.filter((task) => task.isToday)
+    const totalTasks = filteredTasks.length
+    return filteredTasks
+      .map((task, index) => {
         const progress = `・${task.name}（${task.todayTarget}/100）`
-        if (addNewLineUnderTask) {
+        const isLastTask = index === totalTasks - 1
+        if (addNewLineUnderTask && !isLastTask) {
           return task.isBacklog
             ? `${progress}\nhttps://kumukumu.backlog.com/view/${task.project}-${task.backlogNumber}\n\n`
             : `${progress}\n`
@@ -414,11 +416,13 @@ export default function Home() {
     }
   }
   const getNextTasks = (): string => {
-    return tasks
-      .filter((task) => task.isNext)
-      .map((task) => {
+    const filteredTasks = tasks.filter((task) => task.isNext)
+    const totalTasks = filteredTasks.length
+    return filteredTasks
+      .map((task, index) => {
+        const isLastTask = index === totalTasks - 1
         const progress = `・${task.name}（${task.nextTarget}/100）`
-        if (addNewLineUnderTask) {
+        if (addNewLineUnderTask && !isLastTask) {
           return task.isBacklog
             ? `${progress}\nhttps://kumukumu.backlog.com/view/${task.project}-${task.backlogNumber}\n\n`
             : `${progress}\n`
