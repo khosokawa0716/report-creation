@@ -72,6 +72,10 @@ export default function BranchName() {
   const [branchType1Text, setBranchType1Text] = useState(branchType1[0].value)
   const branchType2 = [
     {
+      label: 'TICKET_RESERVE',
+      value: 'TICKET_RESERVE',
+    },
+    {
       label: 'F2023',
       value: 'F2023',
     },

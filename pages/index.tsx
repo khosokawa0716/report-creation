@@ -570,8 +570,9 @@ ${fromName}`
             {!isShowPreview && (
               <div className="form">
                 <div className={styles.tasks}>
-                  {filteredTasks.map((_task, index) => (
+                  {tasks.map((_task, index) => (
                     <div className={styles.task} key={index}>
+                      {_task.isToday && <>タスク名が未入力です。</>}
                       <details>
                         <summary>
                           {!!_task.name && (
