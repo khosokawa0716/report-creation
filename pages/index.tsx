@@ -38,6 +38,10 @@ export default function Home() {
   }, [])
   const projects = [
     {
+      label: 'TICKET_RESERVE',
+      value: 'TICKET_RESERVE',
+    },
+    {
       label: 'F2023',
       value: 'FUTURE_DEVELOP_GOALS_2023',
     },
@@ -177,7 +181,7 @@ export default function Home() {
   const task = {
     name: '',
     isBacklog: true,
-    project: 'FUTURE_DEVELOP_GOALS_2023',
+    project: 'TICKET_RESERVE',
     backlogNumber: '100',
     isMonth: true,
     isWeek: true,
