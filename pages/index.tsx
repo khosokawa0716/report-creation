@@ -179,6 +179,7 @@ export default function Home() {
     }
   }
   const task = {
+    id: 1,
     name: '',
     isBacklog: true,
     project: 'TICKET_RESERVE',
@@ -231,8 +232,32 @@ export default function Home() {
       }),
     )
   }
+  const findNextId = () => {
+    const ids = tasks.map((task) => task.id)
+    let nextId = 1
+    while (ids.includes(nextId)) {
+      nextId++
+    }
+    return nextId
+  }
   const addTask = () => {
-    setTasks((prevState) => [...prevState, task])
+    const newTask = {
+      id: findNextId(),
+      name: '',
+      isBacklog: true,
+      project: 'TICKET_RESERVE',
+      backlogNumber: '100',
+      isMonth: true,
+      isWeek: true,
+      isToday: true,
+      isNext: true,
+      monthTarget: '100',
+      weekTarget: '100',
+      todayTarget: '100',
+      nextTarget: '100',
+      todayProgress: '',
+    }
+    setTasks((prevState) => [...prevState, newTask])
   }
   const operatingTime = {
     startHour: '10',
@@ -495,7 +520,7 @@ ${fromName}`
     setIsShowTodayTasks(checked)
   }
 
-  const filteredTasks = !isShowTodayTasks
+  const displayedTasks = !isShowTodayTasks
     ? tasks
     : tasks.filter((task) => task.isToday === true)
 
@@ -574,7 +599,7 @@ ${fromName}`
             {!isShowPreview && (
               <div className="form">
                 <div className={styles.tasks}>
-                  {tasks.map((_task, index) => (
+                  {displayedTasks.map((_task, index) => (
                     <div className={styles.task} key={index}>
                       <details>
                         <summary>
@@ -595,14 +620,14 @@ ${fromName}`
                               )}
                             </>
                           )}
-                          {!_task.name && <>タスク名が未入力です。</>}
+                          {!_task.name && <>タスク名を入力してください。</>}
                         </summary>
                         <div className={styles['task-content']}>
                           <span className={styles['task-count']}>
                             {String(_task.name.length)}/256
                           </span>
                           <InputText
-                            labelText={`タスク${index + 1}`}
+                            labelText={`タスク${_task.id}`}
                             maxLength={256}
                             borderColor="blue"
                             initValue={_task.name}
