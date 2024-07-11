@@ -576,7 +576,6 @@ ${fromName}`
                 <div className={styles.tasks}>
                   {tasks.map((_task, index) => (
                     <div className={styles.task} key={index}>
-                      {_task.isToday && <>タスク名が未入力です。</>}
                       <details>
                         <summary>
                           {!!_task.name && (
