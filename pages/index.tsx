@@ -254,7 +254,7 @@ export default function Home() {
     const newTask = {
       id: findNextId(),
       name: '',
-      isBacklog: true,
+      isBacklog: false,
       project: 'TICKET_RESERVE',
       backlogNumber: '100',
       isMonth: true,
