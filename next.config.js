@@ -2,6 +2,7 @@
 const path = require('path')
 let prefix = process.env.NODE_ENV === 'development' ? '/' : '/report-creation'
 const nextConfig = {
+  output: 'export',
   reactStrictMode: true,
   swcMinify: true,
   sassOptions: {
