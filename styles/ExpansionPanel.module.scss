@@ -1,0 +1,22 @@
+.com-expansion-panel {
+  .expansion-panel-header {
+    position: relative;
+    cursor: pointer;
+    .expansion-panel-header-icon {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
+  .expansion-panel-content {
+    display: none;
+  }
+  &.expanded {
+    .expansion-panel-header-icon {
+      transform: rotate(180deg);
+    }
+    .expansion-panel-content {
+      display: block;
+    }
+  }
+}

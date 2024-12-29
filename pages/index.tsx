@@ -9,6 +9,7 @@ import ButtonIcon from '../components/ButtonIcon'
 import PulldownMenu from '../components/PulldownMenu'
 import Checkbox from '../components/Checkbox'
 import Range from '../components/Range'
+import ExpansionPanel from '../components/ExpansionPanel'
 import Modal from '../components/Modal'
 import ModalCaution from '../components/ModalCaution'
 import styles from '../styles/Home.module.scss'
@@ -86,7 +87,10 @@ export default function Home() {
       value: 'QC_FB',
     },
   ]
+
+  const [enableHeightChange, setEnableHeightChange] = useState(true)
   const readData = (e: any) => {
+    setEnableHeightChange(false)
     const file_reader = new FileReader()
     file_reader.addEventListener('load', function (e) {
       if (e.target === null || typeof e.target.result !== 'string') return
@@ -98,6 +102,7 @@ export default function Home() {
       setTasks(importData.tasks)
       setAddNewLineUnderTwoTitle(importData.addNewLineUnderTwoTitle)
       setAddNewLineUnderTask(importData.addNewLineUnderTask)
+      setEnableHeightChange(true)
     })
     if (e.target.files === null) return
     file_reader.readAsText(e.target.files[0])
@@ -113,7 +118,7 @@ export default function Home() {
     const hours = zeroPadding(today.getHours())
     const minutes = zeroPadding(today.getMinutes())
     const seconds = zeroPadding(today.getSeconds())
-    return `daily-report_${year}${month}${date}${hours}${minutes}${seconds}.json`
+    return `${year}${month}${date}${hours}${minutes}${seconds}_daily-report.json`
   }
   const exportData = () => {
     const output = {
@@ -181,7 +186,7 @@ export default function Home() {
   const task = {
     id: 1,
     name: '',
-    isBacklog: true,
+    isBacklog: false,
     project: 'TICKET_RESERVE',
     backlogNumber: '100',
     isMonth: true,
@@ -193,6 +198,8 @@ export default function Home() {
     todayTarget: '100',
     nextTarget: '100',
     todayProgress: '',
+    reportHeight: 'auto',
+    isExpanded: false,
   }
   const [tasks, setTasks] = useState([task])
   const setTaskContent = (
@@ -209,7 +216,9 @@ export default function Home() {
       | 'weekTarget'
       | 'todayTarget'
       | 'nextTarget'
-      | 'todayProgress',
+      | 'todayProgress'
+      | 'reportHeight'
+      | 'isExpanded',
     index: number,
     taskStringContent = '',
     taskBooleanContent = false,
@@ -222,7 +231,8 @@ export default function Home() {
           taskKey === 'isMonth' ||
           taskKey === 'isWeek' ||
           taskKey === 'isToday' ||
-          taskKey === 'isNext'
+          taskKey === 'isNext' ||
+          taskKey === 'isExpanded'
         ) {
           task[taskKey] = taskBooleanContent
         } else {
@@ -256,8 +266,16 @@ export default function Home() {
       todayTarget: '100',
       nextTarget: '100',
       todayProgress: '',
+      reportHeight: 'auto',
+      isExpanded: false,
     }
     setTasks((prevState) => [...prevState, newTask])
+  }
+  const handleHeightChange = (height: string, index: number) => {
+    setTaskContent('reportHeight', index, height)
+  }
+  const toggleExpandedPanel = (index: number) => {
+    setTaskContent('isExpanded', index, '', !tasks[index].isExpanded)
   }
   const operatingTime = {
     startHour: '10',
@@ -601,27 +619,32 @@ ${fromName}`
                 <div className={styles.tasks}>
                   {displayedTasks.map((_task, index) => (
                     <div className={styles.task} key={index}>
-                      <details>
-                        <summary>
-                          {!!_task.name && (
-                            <>
-                              {_task.name}
-                              {_task.isBacklog && (
-                                <p className={styles['task-link-wrapper']}>
-                                  <a
-                                    className={styles.link}
-                                    rel="noreferrer"
-                                    target="_blank"
-                                    href={`https://kumukumu.backlog.com/view/${_task.project}-${_task.backlogNumber}`}
-                                  >
-                                    {`https://kumukumu.backlog.com/view/${_task.project}-${_task.backlogNumber}`}
-                                  </a>
-                                </p>
-                              )}
-                            </>
-                          )}
-                          {!_task.name && <>タスク名を入力してください。</>}
-                        </summary>
+                      <ExpansionPanel
+                        titleChildren={
+                          <>
+                            {!!_task.name && (
+                              <>
+                                {_task.name}
+                                {_task.isBacklog && (
+                                  <p className={styles['task-link-wrapper']}>
+                                    <a
+                                      className={styles.link}
+                                      rel="noreferrer"
+                                      target="_blank"
+                                      href={`https://kumukumu.backlog.com/view/${_task.project}-${_task.backlogNumber}`}
+                                    >
+                                      {`https://kumukumu.backlog.com/view/${_task.project}-${_task.backlogNumber}`}
+                                    </a>
+                                  </p>
+                                )}
+                              </>
+                            )}
+                            {!_task.name && <>タスク名を入力してください。</>}
+                          </>
+                        }
+                        isExpanded={_task.isExpanded}
+                        onClick={() => toggleExpandedPanel(index)}
+                      >
                         <div className={styles['task-content']}>
                           <span className={styles['task-count']}>
                             {String(_task.name.length)}/256
@@ -648,33 +671,39 @@ ${fromName}`
                             )
                           }
                         />
-                        <div
-                          className={`${styles['task-content']} ${styles['task-project']}`}
-                        >
-                          <div className={styles['task-project-type']}>
-                            <label>プロジェクト</label>
-                            <PulldownMenu
-                              initValue={_task.project}
+                        {_task.isBacklog && (
+                          <div
+                            className={`${styles['task-content']} ${styles['task-project']}`}
+                          >
+                            <div className={styles['task-project-type']}>
+                              <label>プロジェクト</label>
+                              <PulldownMenu
+                                initValue={_task.project}
+                                isDisabled={!_task.isBacklog}
+                                options={projects}
+                                handleChange={(e) =>
+                                  setTaskContent(
+                                    'project',
+                                    index,
+                                    e.target.value,
+                                  )
+                                }
+                              />
+                            </div>
+                            <InputNumber
+                              labelText="番号"
+                              initValue={_task.backlogNumber}
                               isDisabled={!_task.isBacklog}
-                              options={projects}
-                              handleChange={(e) =>
-                                setTaskContent('project', index, e.target.value)
-                              }
+                              handleChange={(e) => {
+                                setTaskContent(
+                                  'backlogNumber',
+                                  index,
+                                  e.target.value,
+                                )
+                              }}
                             />
                           </div>
-                          <InputNumber
-                            labelText="番号"
-                            initValue={_task.backlogNumber}
-                            isDisabled={!_task.isBacklog}
-                            handleChange={(e) => {
-                              setTaskContent(
-                                'backlogNumber',
-                                index,
-                                e.target.value,
-                              )
-                            }}
-                          />
-                        </div>
+                        )}
                         <div className={styles['task-content']}>
                           <div className={styles['target-group']}>
                             <div className={styles.target}>
@@ -791,13 +820,18 @@ ${fromName}`
                             maxLength={2000}
                             borderColor="blue"
                             initValue={_task.todayProgress}
-                            handleChange={(e) =>
+                            handleChange={(e) => {
                               setTaskContent(
                                 'todayProgress',
                                 index,
                                 e.target.value,
                               )
+                            }}
+                            height={_task.reportHeight}
+                            onHeightChange={(height) =>
+                              handleHeightChange(height, index)
                             }
+                            enableHeightChange={enableHeightChange}
                           />
                         </div>
                         <ButtonIcon
@@ -805,7 +839,7 @@ ${fromName}`
                           iconType="delete"
                           handleClick={() => showModalCaution(index)}
                         ></ButtonIcon>
-                      </details>
+                      </ExpansionPanel>
                     </div>
                   ))}
                   <ButtonIcon
