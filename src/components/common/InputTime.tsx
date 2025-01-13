@@ -1,5 +1,5 @@
 import React from 'react'
-import inputTimeStyles from '../styles/InputTime.module.scss'
+import inputTimeStyles from '@styles/components/common/InputTime.module.scss'
 
 interface InputProps {
   initValue: string

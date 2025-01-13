@@ -1,5 +1,5 @@
 import React from 'react'
-import checkboxStyles from '../styles/Checkbox.module.scss'
+import checkboxStyles from '@styles/components/common/Checkbox.module.scss'
 
 interface CheckboxProps {
   labelText: string

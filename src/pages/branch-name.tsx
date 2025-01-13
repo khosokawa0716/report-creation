@@ -1,11 +1,11 @@
 import Head from 'next/head'
-import Checkbox from '../components/Checkbox'
-import PulldownMenu from '../components/PulldownMenu'
-import InputNumber from '../components/InputNumber'
-import InputPassword from '../components/InputPassword'
-import Button from '../components/Button'
-import commonStyles from '../styles/Home.module.scss'
-import styles from '../styles/BranchName.module.scss'
+import Checkbox from '@components/common/Checkbox'
+import PulldownMenu from '@components/common/PulldownMenu'
+import InputNumber from '@components/common/InputNumber'
+import InputPassword from '@components/common/InputPassword'
+import Button from '@components/common/Button'
+import commonStyles from '@styles/Home.module.scss'
+import styles from '@styles/BranchName.module.scss'
 
 import React, { useState, useEffect } from 'react'
 

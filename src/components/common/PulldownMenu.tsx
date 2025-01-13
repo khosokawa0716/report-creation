@@ -1,5 +1,5 @@
 import React from 'react'
-import pulldownMenuStyles from '../styles/PulldownMenu.module.scss'
+import pulldownMenuStyles from '@styles/components/common/PulldownMenu.module.scss'
 
 type SelectOption = {
   label: string

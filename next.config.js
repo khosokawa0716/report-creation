@@ -9,6 +9,12 @@ const nextConfig = {
     includePaths: [path.join(__dirname, 'styles')],
   },
   assetPrefix: prefix,
+  webpack: (config) => {
+    config.resolve.alias['@'] = path.join(__dirname)
+    config.resolve.alias['@styles'] = path.resolve(__dirname, 'src/styles');
+    config.resolve.alias['@components'] = path.resolve(__dirname, 'src/components');
+    return config
+  }
 }
 
 module.exports = nextConfig

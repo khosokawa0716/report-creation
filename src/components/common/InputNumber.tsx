@@ -1,5 +1,5 @@
 import React from 'react'
-import inputNumberStyles from '../styles/InputNumber.module.scss'
+import inputNumberStyles from '@styles/components/common/InputNumber.module.scss'
 
 interface InputProps {
   labelText: string

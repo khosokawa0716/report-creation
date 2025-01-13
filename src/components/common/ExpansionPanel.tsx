@@ -1,7 +1,7 @@
 import React from 'react'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import expansionPanelStyles from '../styles/ExpansionPanel.module.scss'
+import expansionPanelStyles from '@styles/components/common/ExpansionPanel.module.scss'
 interface ExpansionPanelProps {
   children: React.ReactNode
   titleChildren: React.ReactNode

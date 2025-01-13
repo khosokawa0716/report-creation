@@ -1,5 +1,5 @@
 import React from 'react'
-import buttonStyles from '../styles/ButtonIcon.module.scss'
+import buttonStyles from '@styles/components/common/ButtonIcon.module.scss'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { faEdit } from '@fortawesome/free-solid-svg-icons'

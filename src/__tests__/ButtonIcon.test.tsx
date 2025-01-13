@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
-import ButtonIcon from '../../components/ButtonIcon'
+import ButtonIcon from '@components/common/ButtonIcon'
 
 describe('ButtonIcon component', () => {
   const handleClick = jest.fn()

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import textAreaStyles from '../styles/TextArea.module.scss'
+import textAreaStyles from '@styles/components/common/TextArea.module.scss'
 
 interface InputProps {
   borderColor: 'blue' | 'gray'

@@ -1,31 +1,23 @@
 import React from 'react'
-import inputStyles from '../styles/InputText.module.scss'
+import inputStyles from '@styles/components/common/InputText.module.scss'
 
 interface InputProps {
-  borderColor: 'blue' | 'gray'
   labelText: string
-  maxLength?: number
   initValue: string
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 export default function InputText({
-  borderColor,
   labelText,
-  maxLength = 5000,
   initValue,
   handleChange,
 }: InputProps) {
   return (
-    <label
-      className={`${inputStyles['com-input']}  ${
-        borderColor === 'blue' ? inputStyles.blue : inputStyles.gray
-      }`}
-    >
+    <label className={`${inputStyles['com-input']}  ${inputStyles.blue}`}>
       {labelText}
       <input
-        type="text"
+        type="password"
         minLength={0}
-        maxLength={maxLength}
+        maxLength={256}
         value={initValue}
         onChange={(e) => handleChange(e)}
       />

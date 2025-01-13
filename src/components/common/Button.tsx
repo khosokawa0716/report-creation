@@ -1,5 +1,5 @@
 import React from 'react'
-import buttonStyles from '../styles/Button.module.scss'
+import buttonStyles from '@styles/components/common/Button.module.scss'
 
 interface ButtonProps {
   backGroundColor: 'blue' | 'green' | 'red' | 'gray'

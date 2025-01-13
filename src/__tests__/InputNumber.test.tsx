@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
-import InputNumber from '../../components/InputNumber'
-import styles from '../styles/Button.module.scss'
+import InputNumber from '@components/common/InputNumber'
+import styles from '@styles/Button.module.scss'
 
 describe('InputNumber component', () => {
   test('renders the inputNumber with the correct text', () => {

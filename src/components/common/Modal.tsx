@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import modalStyles from '../styles/Modal.module.scss'
+import modalStyles from '@styles/components/common/Modal.module.scss'
 import Button from './Button'
 
 interface ModalProps {

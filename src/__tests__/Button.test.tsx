@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
-import Button from '../../components/Button'
-import styles from '../styles/Button.module.scss'
+import Button from '@components/common/Button'
+import styles from '@styles/Button.module.scss'
 
 describe('Button component', () => {
   test('renders the button with the correct text', () => {

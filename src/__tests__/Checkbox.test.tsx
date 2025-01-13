@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
-import Checkbox from '../../components/Checkbox'
-import styles from '../styles/Button.module.scss'
+import Checkbox from '@components/common/Checkbox'
+import styles from '@styles/Button.module.scss'
 
 describe('Checkbox component', () => {
   test('renders the checkbox with the correct text', () => {
